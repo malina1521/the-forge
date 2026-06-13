@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wordsmith Forge: An Interactive Quest</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Reset & CSS Custom Properties */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-dark: #0f0b0a;
+      --bg-charcoal: #191413;
+      --bg-parchment-dark: #1b1615;
+      --bg-parchment-light: #f6efe2;
+      --border-wood: #4a3429;
+      --accent-amber: #e5a93b;
+      --accent-amber-glow: rgba(229, 169, 59, 0.4);
+      --accent-terracotta: #c05a46;
+      --accent-terracotta-glow: rgba(192, 90, 70, 0.3);
+      --accent-brass: #d9a05b;
+      --accent-iron: #524744;
+      --text-light: #ece6dc;
+      --text-muted: #a89f9e;
+      --text-dark: #2b2524;
+      --text-gold: #f5c469;
+      --font-serif: "EB Garamond", Garamond, serif;
+      --font-display: "Cinzel", Georgia, serif;
+      --font-sans: "Montserrat", sans-serif;
+      --transition-speed: 0.6s;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-serif);
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient embers background effect - smoldering forge fire pulse */
+    .embers-overlay {
+      position: fixed;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background:
+        radial-gradient(circle at 50% 100%, rgba(229, 90, 50, 0.35) 0%, rgba(229, 169, 59, 0.12) 45%, rgba(15, 11, 10, 0) 80%),
+        radial-gradient(circle at 20% 90%, rgba(192, 90, 70, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 90%, rgba(192, 90, 70, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(15, 11, 10, 0) 40%, rgba(10, 7, 7, 0.75) 100%);
+      pointer-events: none;
+      z-index: 1;
+      animation: forgePulse 8s ease-in-out infinite alternate;
+      transform-origin: center bottom;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes forgePulse {
+      0% {
+        opacity: 0.65;
+        transform: scale(1.0) translateY(0);
+        filter: saturate(0.85) contrast(0.95);
+      }
+
+      33% {
+        opacity: 0.82;
+        transform: scale(1.03) translateY(-8px) rotate(0.3deg);
+        filter: saturate(1.0) contrast(1.0);
+      }
+
+      66% {
+        opacity: 0.76;
+        transform: scale(1.01) translateY(-4px) rotate(-0.3deg);
+        filter: saturate(0.95) contrast(1.05);
+      }
+
+      100% {
+        opacity: 1.0;
+        transform: scale(1.06) translateY(-12px) rotate(0deg);
+        filter: saturate(1.25) contrast(1.12);
+      }
+    }
+
+    /* Procedural fire particle animation */
+    .ember-particle {
+      position: absolute;
+      background: radial-gradient(circle, var(--accent-amber) 0%, rgba(229, 169, 59, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatUp 6s ease-in infinite;
+      z-index: 2;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0.5);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.8;
+      }
+
+      90% {
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: translateY(-10vh) translateX(50px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Cozy Sound Controls (Top-Right) */
+    .sound-control-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .ambient-btn {
+      background: rgba(40, 32, 30, 0.85);
+      border: 1px solid var(--border-wood);
+      color: var(--text-light);
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      min-height: 48px;
+    }
+
+    .ambient-btn:hover {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+      box-shadow: 0 0 10px var(--accent-amber-glow);
+    }
+
+    .ambient-btn.active {
+      background: var(--accent-terracotta);
+      border-color: var(--accent-amber);
+      color: var(--text-light);
+    }
+
+    .ambient-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Screen Transitions */
+    .screen {
+      display: none;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 5;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* STAGE 1: THE LANDING PAGE */
+    #landing-page {
+      background-color: #0b0707;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1500px;
+    }
+
+    /* Heavy Split Doors Style */
+    .door-panel {
+      position: fixed;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: radial-gradient(circle at center, #231c1a 0%, #0d0a09 100%);
+      border: 6px solid #1a1413;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      transition: transform var(--transition-speed) cubic-bezier(0.7, 0, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .door-left {
+      left: 0;
+      border-right: 3px solid var(--border-wood);
+      transform-origin: left center;
+    }
+
+    .door-right {
+      right: 0;
+      border-left: 3px solid var(--border-wood);
+      transform-origin: right center;
+    }
+
+    /* Door Ornaments */
+    .door-band {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: linear-gradient(to bottom, #38302d, #1f1b1a);
+      border-top: 2px solid #5a4f4b;
+      border-bottom: 2px solid #100d0c;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .door-band-top {
+      top: 15%;
+    }
+
+    .door-band-bottom {
+      bottom: 15%;
+    }
+
+    .door-handle-ring {
+      width: 80px;
+      height: 80px;
+      border: 8px solid var(--accent-iron);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .door-left .door-handle-ring {
+      right: 20px;
+      border-right-color: var(--accent-brass);
+    }
+
+    .door-right .door-handle-ring {
+      left: 20px;
+      border-left-color: var(--accent-brass);
+    }
+
+    /* Split Animation Active Class */
+    .doors-opened .door-left {
+      transform: translateX(-100%);
+    }
+
+    .doors-opened .door-right {
+      transform: translateX(100%);
+    }
+
+    /* Scroll Interface on Outer Door */
+    /* Scroll Interface on Outer Door - Cinematic Dark Theme */
+    .scroll-container {
+      background-color: rgba(25, 20, 19, 0.82);
+      background-image: radial-gradient(rgba(229, 169, 59, 0.04) 1px, transparent 0);
+      background-size: 24px 24px;
+      border: 1px solid rgba(229, 169, 59, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: clamp(1.5rem, 5vw, 2.5rem);
+      width: 95%;
+      max-width: 650px;
+      color: #ece6dc;
+      text-align: center;
+      position: relative;
+      z-index: 15;
+      transition: opacity 0.5s ease;
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+    }
+
+    .scroll-header {
+      font-family: var(--font-display);
+      color: var(--accent-amber);
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+      border-bottom: 1px double var(--accent-amber);
+      padding-bottom: 10px;
+      text-shadow: 0 0 10px var(--accent-amber-glow);
+    }
+
+    .poem-layout {
+      margin-bottom: 35px;
+      font-style: italic;
+      white-space: pre-line;
+      font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+      line-height: 2.0;
+      font-family: var(--font-serif);
+      color: #fce8d3;
+      letter-spacing: 0.12em;
+      text-align: center;
+      text-shadow:
+        0 0 10px rgba(245, 196, 105, 0.5),
+        0 0 22px rgba(229, 169, 59, 0.35),
+        0 0 45px rgba(229, 90, 50, 0.2);
+      transition: text-shadow 0.5s ease;
+    }
+
+    /* Interactive Inputs */
+    .input-group {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .workspace-input {
+      width: 100%;
+      max-width: 380px;
+      background-color: rgba(15, 12, 11, 0.75);
+      border: 1px solid rgba(229, 169, 59, 0.35);
+      color: #ece6dc;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      padding: 12px 20px;
+      text-align: center;
+      border-radius: 6px;
+      outline: none;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+      min-height: 48px;
+    }
+
+    .workspace-input:focus {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 10px var(--accent-amber-glow), inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .workspace-input:disabled {
+      background-color: rgba(30, 24, 22, 0.6);
+      color: #7c756e;
+      border-color: rgba(229, 169, 59, 0.15);
+      cursor: not-allowed;
+    }
+
+    .forge-btn {
+      background-color: var(--accent-terracotta);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(192, 90, 70, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .forge-btn:hover:not(:disabled) {
+      background-color: #a84532;
+      box-shadow: 0 6px 15px rgba(192, 90, 70, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .forge-btn:disabled {
+      background-color: #a39593;
+      color: #d1c8c7;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* Lockout Notice Style */
+    .lockout-info {
+      color: var(--accent-terracotta);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .lockout-info.active {
+      display: block;
+      animation: pulseAlert 1.5s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0% {
+        opacity: 0.7;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.7;
+      }
+    }
+
+    /* Shaking Input effect on incorrect */
+    .shake {
+      animation: shakeInput 0.4s ease;
+    }
+
+    @keyframes shakeInput {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-8px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(8px);
+      }
+    }
+
+
+    /* STAGE 2: THE MAIN FORGE FLOOR */
+    #forge-floor {
+      background: radial-gradient(circle at center, #261f1d 0%, #0c0807 100%);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 30px;
+    }
+
+    .dashboard-container {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    /* The Grand Forge Doors (Locks indicators visual at the top) */
+    .grand-doors-panel {
+      background: rgba(30, 24, 22, 0.85);
+      border: 2px solid var(--border-wood);
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .grand-doors-header {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      color: var(--accent-amber);
+      text-align: center;
+    }
+
+    .locks-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .lock-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .lock-circle {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--accent-iron);
+      border-radius: 50%;
+      background-color: #201a18;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.5s ease;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .lock-circle svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--text-muted);
+      transition: all 0.5s ease;
+    }
+
+    /* Illuminated Lock State */
+    .lock-indicator.unlocked {
+      color: var(--accent-amber);
+    }
+
+    .lock-indicator.unlocked .lock-circle {
+      border-color: var(--accent-amber);
+      background-color: #382a15;
+      box-shadow: 0 0 15px var(--accent-amber-glow), inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .lock-indicator.unlocked .lock-circle svg {
+      fill: var(--accent-amber);
+      transform: scale(1.1);
+    }
+
+    /* Artisan Table & Chests Layout - Mobile First */
+    .artisan-table {
+      background: linear-gradient(to bottom, #2d211b, #1b1310);
+      border: 3px solid var(--border-wood);
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 2px 10px rgba(255, 255, 255, 0.05);
+      padding: 24px 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .artisan-table {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 40px 20px;
+      }
+    }
+
+    .artisan-table::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5%;
+      width: 90%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent-brass), transparent);
+    }
+
+    /* Material Cards Styling */
+    .vault-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 30px 20px;
+      border-radius: 14px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    /* Wood Theme (Cultivator) - Rich mahogany planks with leaf highlights */
+    .card-wood {
+      background:
+        repeating-linear-gradient(to right, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 2px, transparent 2px, transparent 32px),
+        linear-gradient(135deg, #5c321a 0%, #3a1c0d 60%, #1f0f07 100%);
+      border: 3px solid #452210;
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        inset 0 0 25px rgba(0, 0, 0, 0.9),
+        inset 0 0 40px rgba(94, 168, 107, 0.08);
+    }
+
+    .card-wood:hover {
+      box-shadow:
+        0 20px 45px rgba(94, 168, 107, 0.25),
+        inset 0 0 20px rgba(0, 0, 0, 0.7),
+        inset 0 0 35px rgba(94, 168, 107, 0.25);
+      border-color: #61ab6e;
+    }
+
+    .leaf-accent {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      fill: #68c079;
+      opacity: 0.55;
+      filter: drop-shadow(0 0 6px rgba(104, 192, 121, 0.8));
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .card-wood:hover .leaf-accent {
+      opacity: 0.95;
+      transform: scale(1.2) rotate(12deg);
+      fill: #85e095;
+      filter: drop-shadow(0 0 10px rgba(133, 224, 149, 1));
+    }
+
+    .leaf-top-left {
+      top: 14px;
+      left: 14px;
+    }
+
+    .leaf-bottom-right {
+      bottom: 14px;
+      right: 14px;
+      transform: scale(-1);
+    }
+
+    .card-wood:hover .leaf-bottom-right {
+      transform: scale(-1.2) rotate(12deg);
+    }
+
+    /* Brass Theme (Submariner) - Riveted brushed brass with metallic sheen */
+    .card-brass {
+      background:
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 4px),
+        linear-gradient(135deg, #d4af37 0%, #a67c3b 30%, #e8c86b 50%, #8c6320 75%, #593e11 100%);
+      border: 3px solid #856226;
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        inset 0 0 25px rgba(0, 0, 0, 0.5),
+        inset 0 0 35px rgba(255, 255, 255, 0.15);
+    }
+
+    .card-brass:hover {
+      box-shadow:
+        0 20px 45px rgba(217, 160, 91, 0.45),
+        inset 0 0 20px rgba(0, 0, 0, 0.4),
+        inset 0 0 30px rgba(255, 255, 255, 0.3);
+      border-color: #e5b85c;
+    }
+
+    .card-brass::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1.5px dashed rgba(229, 169, 59, 0.55);
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .rivet {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle at 3px 3px, #fff3d1 0%, #a8813b 50%, #4a330e 100%);
+      border-radius: 50%;
+      border: 1px solid #573f13;
+      box-shadow:
+        1px 1px 3px rgba(0, 0, 0, 0.8),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.5),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.6);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .rivet-tl {
+      top: 14px;
+      left: 14px;
+    }
+
+    .rivet-tr {
+      top: 14px;
+      right: 14px;
+    }
+
+    .rivet-bl {
+      bottom: 14px;
+      left: 14px;
+    }
+
+    .rivet-br {
+      bottom: 14px;
+      right: 14px;
+    }
+
+    .card-brass:hover .vault-svg g {
+      transform: translate(45px, 65px) scale(0.6) rotate(120deg);
+      transform-origin: 45px 65px;
+      transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Iron Theme (Writer) - Hammered dark iron with scrollwork */
+    .card-iron {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 60%),
+        linear-gradient(135deg, #322d2d 0%, #1a1717 50%, #0d0c0c 100%);
+      border: 3px solid #292424;
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.85),
+        inset 0 0 30px rgba(0, 0, 0, 0.95),
+        inset 0 0 20px rgba(229, 169, 59, 0.03);
+    }
+
+    .card-iron:hover {
+      box-shadow:
+        0 20px 45px rgba(229, 169, 59, 0.22),
+        inset 0 0 20px rgba(0, 0, 0, 0.8),
+        inset 0 0 25px rgba(229, 169, 59, 0.1);
+      border-color: #4a4141;
+    }
+
+    .scrollwork-corner {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #d9a05b;
+      stroke-width: 1.5;
+      opacity: 0.4;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .card-iron:hover .scrollwork-corner {
+      opacity: 0.9;
+      stroke: #f5c469;
+      filter: drop-shadow(0 0 6px rgba(245, 196, 105, 0.85));
+    }
+
+    .scroll-tl {
+      top: 14px;
+      left: 14px;
+    }
+
+    .scroll-tr {
+      top: 14px;
+      right: 14px;
+      transform: scaleX(-1);
+    }
+
+    .scroll-bl {
+      bottom: 14px;
+      left: 14px;
+      transform: scaleY(-1);
+    }
+
+    .scroll-br {
+      bottom: 14px;
+      right: 14px;
+      transform: scale(-1);
+    }
+
+    /* Floating Animations */
+    @keyframes floatCardWood {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-7px) rotate(0.4deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    @keyframes floatCardBrass {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-9px) rotate(-0.5deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    @keyframes floatCardIron {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(0.3deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    #vault-cultivator-btn {
+      animation: floatCardWood 4.8s ease-in-out infinite;
+    }
+
+    #vault-submariner-btn {
+      animation: floatCardBrass 5.4s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+
+    #vault-writer-btn {
+      animation: floatCardIron 5.1s ease-in-out infinite;
+      animation-delay: 1.0s;
+    }
+
+    .vault-container:hover {
+      animation-play-state: paused;
+      transform: translateY(-12px) scale(1.04) rotate(0deg) !important;
+    }
+
+    .vault-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      color: var(--text-light);
+      margin-top: 15px;
+      text-align: center;
+      transition: color 0.3s ease;
+      z-index: 2;
+    }
+
+    .vault-container:hover .vault-name {
+      color: var(--accent-amber);
+    }
+
+    /* Chest SVGs visual shapes */
+    .vault-svg {
+      width: 140px;
+      height: 100px;
+      transition: transform 0.5s ease;
+      z-index: 2;
+    }
+
+    /* Unlocked glowing transitions */
+    .vault-container.unlocked {
+      cursor: default;
+      animation: none;
+      transform: translateY(0) scale(1);
+    }
+
+    .vault-container.unlocked:hover {
+      transform: none;
+    }
+
+    .vault-container.unlocked .vault-name {
+      color: var(--accent-amber);
+    }
+
+    .vault-container.unlocked .vault-svg {
+      filter: drop-shadow(0 0 15px rgba(229, 169, 59, 0.6));
+    }
+
+    /* Active Workspace parchment */
+    .workspace-board {
+      background-color: var(--bg-parchment-light);
+      background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 0);
+      background-size: 20px 20px;
+      border: 1px solid #d4c8b3;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(139, 90, 43, 0.12);
+      padding: 30px;
+      color: var(--text-dark);
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+
+    .workspace-board::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1px solid rgba(139, 90, 43, 0.15);
+      pointer-events: none;
+    }
+
+    .workspace-info-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: var(--accent-terracotta);
+    }
+
+    .workspace-info-desc {
+      font-size: 1rem;
+      max-width: 600px;
+    }
+
+    /* Step Inside final activation visual */
+    .final-portal-btn {
+      display: inline-block;
+      background: radial-gradient(circle, var(--accent-terracotta) 0%, #8c2a18 100%);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      padding: 16px 40px;
+      border: 2px solid var(--accent-amber);
+      border-radius: 4px;
+      cursor: pointer;
+      animation: warmGlowBtn 2s infinite alternate;
+      box-shadow: 0 0 20px var(--accent-terracotta-glow);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .final-portal-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 30px rgba(229, 169, 59, 0.5);
+    }
+
+    @keyframes warmGlowBtn {
+      0% {
+        box-shadow: 0 0 15px var(--accent-terracotta-glow);
+      }
+
+      100% {
+        box-shadow: 0 0 30px rgba(229, 169, 59, 0.3), 0 0 10px var(--accent-terracotta-glow);
+      }
+    }
+
+
+    /* MODAL SYSTEM FOR VAULTS */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 8, 8, 0.45);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 150;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      width: 95%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(229, 169, 59, 0.25);
+      overflow: hidden;
+      position: relative;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+      padding: 2.5px;
+      display: flex;
+      margin: auto;
+    }
+
+    /* Rotating gold border gradient */
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg,
+          transparent 0%,
+          #e5a93b 25%,
+          transparent 45%,
+          #f5c469 50%,
+          transparent 70%,
+          #d9a05b 75%,
+          transparent 95%,
+          transparent 100%);
+      animation: rotateGoldBorder 6s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateGoldBorder {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .modal-content-inner {
+      background: rgba(25, 20, 19, 0.93);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .modal-left {
+      background-color: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 0 15px 0;
+      color: var(--text-light);
+      width: 100%;
+    }
+
+    .modal-left .vault-svg {
+      width: 110px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+
+    .modal-left-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      letter-spacing: 2px;
+      color: var(--accent-amber);
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .modal-left-desc {
+      font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 480px;
+      font-family: var(--font-sans);
+      line-height: 1.4;
+    }
+
+    .modal-right {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: #ece6dc;
+      width: 100%;
+    }
+
+    #modal-poem {
+      font-family: var(--font-serif);
+      font-style: italic;
+      white-space: pre-line;
+      color: #dfd5c6;
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 8px rgba(229, 169, 59, 0.45), 0 0 20px rgba(229, 169, 59, 0.15);
+      font-size: clamp(0.85rem, 1.65vh, 1.15rem);
+      line-height: 1.6;
+      margin-bottom: 25px;
+      width: 100%;
+      max-width: 580px;
+    }
+
+    #modal-chest-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Golden Light Burst Animation */
+    .gold-burst-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, rgba(255, 253, 235, 1) 0%, rgba(245, 196, 105, 0.95) 25%, rgba(229, 169, 59, 0.6) 55%, rgba(229, 169, 59, 0) 75%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: none;
+      z-index: 10;
+      animation: playGoldBurst 1.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+      box-shadow: 0 0 40px rgba(229, 169, 59, 0.8);
+    }
+
+    @keyframes playGoldBurst {
+      0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 1;
+        filter: blur(0px) brightness(1.5);
+      }
+
+      40% {
+        opacity: 1.0;
+        filter: blur(2px) brightness(1.2);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(30);
+        opacity: 0;
+        filter: blur(12px) brightness(1.0);
+      }
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      color: #7c726a;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      line-height: 1;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close-btn:hover {
+      color: var(--accent-terracotta);
+    }
+
+
+    /* STAGE 3: THE FINALE (READING SANCTUARY) */
+    #reading-sanctuary {
+      background-color: var(--bg-dark);
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: none;
+      z-index: 200;
+    }
+
+    #reading-sanctuary.active {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+    }
+
+    .sanctuary-sidebar {
+      background-color: #151110;
+      border-right: 2px solid var(--border-wood);
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 30px;
+      overflow-y: auto;
+      height: 100vh;
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .sanctuary-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--accent-amber);
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border-wood);
+      padding-bottom: 15px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .sanctuary-meta {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .sanctuary-instructions {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.5;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 4px;
+      border-left: 3px solid var(--accent-terracotta);
+    }
+
+    .spotify-embed-container {
+      margin-top: auto;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Distraction-Free Reading Scroll Layout */
+    /* Distraction-Free Reading Scroll Layout - Dark Premium Parchment */
+    .sanctuary-scroll {
+      background-color: #120e0d;
+      background-image:
+        radial-gradient(circle at 50% 30%, rgba(38, 28, 25, 0.3) 0%, rgba(10, 8, 7, 0.95) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.98);
+      overflow-y: auto;
+      height: 100vh;
+      padding: clamp(3rem, 7vw, 6rem) clamp(2rem, 6vw, 4rem);
+      scroll-behavior: smooth;
+      border-left: 1px solid rgba(229, 169, 59, 0.08);
+    }
+
+    .manuscript-paper {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #ebd9c5;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    .manuscript-main-title {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      color: var(--accent-amber);
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(229, 169, 59, 0.3);
+    }
+
+    .manuscript-subtitle {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: var(--accent-terracotta);
+      text-align: center;
+      margin-bottom: 60px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* Minimal Glowing SVG Divider */
+    .section-divider {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 90px 0;
+      position: relative;
+    }
+
+    .glowing-divider-svg {
+      width: 60%;
+      height: 20px;
+      overflow: visible;
+      filter: drop-shadow(0 0 4px rgba(229, 169, 59, 0.3));
+    }
+
+    .divider-glow-circle {
+      fill: #f5c469;
+      filter: drop-shadow(0 0 8px #f5c469) drop-shadow(0 0 15px #e5a93b);
+      animation: pulseGlowCircle 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlowCircle {
+      0% {
+        r: 3.5px;
+        opacity: 0.7;
+        filter: drop-shadow(0 0 4px #f5c469);
+      }
+
+      100% {
+        r: 5.5px;
+        opacity: 1;
+        filter: drop-shadow(0 0 10px #f5c469) drop-shadow(0 0 20px #e5a93b);
+      }
+    }
+
+    .manuscript-section {
+      margin-bottom: 70px;
+    }
+
+    .manuscript-section-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--accent-brass);
+      margin-bottom: 35px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(217, 160, 91, 0.15);
+      padding-bottom: 10px;
+    }
+
+    .piece-container {
+      margin-bottom: 70px;
+      /* clear line separation */
+    }
+
+    .piece-header {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      letter-spacing: 1px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-bottom: 6px;
+    }
+
+    .piece-author {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .piece-content {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      line-height: 2.1;
+      letter-spacing: 0.03em;
+      text-align: justify;
+      color: #dfd5c6;
+    }
+
+    /* Elegant drop cap for chapter prose only */
+    .piece-content:not(.poem)::first-letter {
+      font-family: var(--font-display);
+      font-size: 3.8rem;
+      float: left;
+      line-height: 0.85;
+      margin-right: 12px;
+      margin-top: 4px;
+      color: var(--accent-amber);
+      text-shadow: 0 0 10px rgba(229, 169, 59, 0.65);
+      font-weight: 700;
+    }
+
+    .piece-content.poem {
+      white-space: pre-line;
+      text-align: center;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      line-height: 1.95;
+      color: #ebd9c5;
+      text-shadow: 0 0 8px rgba(245, 196, 105, 0.15);
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 900px) {
+      .artisan-table {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      #reading-sanctuary.active {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .sanctuary-sidebar {
+        height: auto;
+        padding: 25px;
+        border-right: none;
+        border-bottom: 2px solid var(--border-wood);
+      }
+
+      .spotify-embed-container {
+        margin-top: 15px;
+      }
+
+      .sanctuary-scroll {
+        height: auto;
+        padding: 40px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="embers-overlay" id="embers-bg"></div>
+
+  <!-- Sound control panels -->
+  <div class="sound-control-panel">
+    <button class="ambient-btn" id="ambient-audio-btn">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+      </svg>
+      Hearth Sounds: Off
+    </button>
+  </div>
+
+  <!-- STAGE 1: THE LANDING PAGE -->
+  <div id="landing-page" class="screen active">
+    <!-- Double opening heavy wooden gates -->
+    <div class="door-panel door-left" id="left-door">
+      <div class="door-band door-band-top"></div>
+      <div class="door-band door-band-bottom"></div>
+      <div class="door-handle-ring"></div>
+    </div>
+
+    <div class="door-panel door-right" id="right-door">
+      <div class="door-band door-band-top"></div>
+      <div class="door-band door-band-bottom"></div>
+      <div class="door-handle-ring"></div>
+    </div>
+
+    <!-- Entrance Scroll Paper Overlay -->
+    <div class="scroll-container" id="landing-scroll">
+      <div class="scroll-header">The Entrance to the Forge</div>
+      <div class="poem-layout">
+        A spark struck in a crowded space,
+        Leaving the noise for a quieter pace.
+        We built a world from line to line,
+        Shifting the raw to something divine.
+
+        From a certain point of view, you'll see,
+        The edge of the page holds the passkey.
+        Trace the margins where it all began,
+        Recall the greeting, find the plan.
+
+        Call out the name from that distant shore:
+        The very first words at the hidden door.
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="entrance-input" class="workspace-input" placeholder="Call out the name..."
+          autocomplete="off">
+        <button id="entrance-submit" class="forge-btn">Unlock Gate</button>
+        <div class="lockout-info" id="lockout-entrance">The furnace is overheated. Let the tools cool down... 15:00
+          remaining</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: THE MAIN FORGE FLOOR -->
+  <div id="forge-floor" class="screen">
+    <div class="dashboard-container">
+
+      <!-- Top Zone: Grand Forge Doors Lock Status -->
+      <div class="grand-doors-panel">
+        <div class="grand-doors-header">The Grand Forge Doors</div>
+        <div class="locks-container">
+          <div class="lock-indicator" id="lock-cultivator">
+            <div class="lock-circle">
+              <!-- Key Lock SVG -->
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+              </svg>
+            </div>
+            <span>Hearth Lock</span>
+          </div>
+
+          <div class="lock-indicator" id="lock-submariner">
+            <div class="lock-circle">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+              </svg>
+            </div>
+            <span>Inscription Lock</span>
+          </div>
+
+          <div class="lock-indicator" id="lock-writer">
+            <div class="lock-circle">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+              </svg>
+            </div>
+            <span>Memory Lock</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Zone: Artisan Table & Interactive Vaults -->
+      <div class="artisan-table">
+        <!-- Object 1: The Cultivator's Chest (Wood & Leaf Card) -->
+        <div class="vault-container card-wood" id="vault-cultivator-btn" onclick="openVaultModal('cultivator')">
+          <!-- Inline leaf decorations -->
+          <svg class="leaf-accent leaf-top-left" viewBox="0 0 24 24">
+            <path
+              d="M17 2 C13 2 9 6 9 10 C9 11.4 9.5 12.7 10.3 13.7 L2 22 L3.8 23.8 L12.1 15.5 C13.1 16.3 14.4 16.8 15.8 16.8 C19.8 16.8 23.8 12.8 23.8 8.8 C23.8 6.5 21 2.5 17 2 Z M17 11.8 C15 11.8 13.2 10 13.2 8 C13.2 6 15 4.2 17 4.2 C19 4.2 20.8 6 20.8 8 C20.8 10 19 11.8 17 11.8 Z" />
+          </svg>
+          <svg class="leaf-accent leaf-bottom-right" viewBox="0 0 24 24">
+            <path
+              d="M17 2 C13 2 9 6 9 10 C9 11.4 9.5 12.7 10.3 13.7 L2 22 L3.8 23.8 L12.1 15.5 C13.1 16.3 14.4 16.8 15.8 16.8 C19.8 16.8 23.8 12.8 23.8 8.8 C23.8 6.5 21 2.5 17 2 Z M17 11.8 C15 11.8 13.2 10 13.2 8 C13.2 6 15 4.2 17 4.2 C19 4.2 20.8 6 20.8 8 C20.8 10 19 11.8 17 11.8 Z" />
+          </svg>
+
+          <svg class="vault-svg" viewBox="0 0 140 100">
+            <!-- Rustic wood chest wrapping iron leaf aesthetics -->
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#5c3a21" stroke="#332012" stroke-width="3" />
+            <path d="M20 50 L120 50" stroke="#332012" stroke-width="4" />
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#d9a05b" stroke="#7a5423" stroke-width="2" />
+            <circle cx="70" cy="50" r="3" fill="#111" />
+            <!-- Iron leaf filigree ornaments wrapping edges -->
+            <path d="M22 32 C35 32 30 48 22 48" fill="none" stroke="#2e382e" stroke-width="2.5" />
+            <path d="M118 32 C105 32 110 48 118 48" fill="none" stroke="#2e382e" stroke-width="2.5" />
+            <!-- Glow points representing leaf tips -->
+            <circle class="leaf-glow-point" cx="32" cy="40" r="3.5" fill="#52a15f" />
+            <circle class="leaf-glow-point" cx="108" cy="40" r="3.5" fill="#52a15f" />
+          </svg>
+          <div class="vault-name">The Cultivator's Chest</div>
+        </div>
+
+        <!-- Object 2: Submariner's Vault (Brass & Rivets Card) -->
+        <div class="vault-container card-brass" id="vault-submariner-btn" onclick="openVaultModal('submariner')">
+          <!-- Rivets positioned absolute -->
+          <div class="rivet rivet-tl"></div>
+          <div class="rivet rivet-tr"></div>
+          <div class="rivet rivet-bl"></div>
+          <div class="rivet rivet-br"></div>
+
+          <svg class="vault-svg" viewBox="0 0 140 100">
+            <!-- Brass chest with rivets and a valve -->
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#a67c3b" stroke="#5c431d" stroke-width="3" />
+            <path d="M20 50 L120 50" stroke="#5c431d" stroke-width="4" />
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#c0c0c0" stroke="#808080" stroke-width="2" />
+            <!-- Rivets -->
+            <circle cx="26" cy="36" r="2" fill="#5c431d" />
+            <circle cx="114" cy="36" r="2" fill="#5c431d" />
+            <circle cx="26" cy="84" r="2" fill="#5c431d" />
+            <circle cx="114" cy="84" r="2" fill="#5c431d" />
+            <!-- Stylized Valve Gear -->
+            <g transform="translate(45, 65) scale(0.6)">
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#c0c0c0" stroke-width="4" />
+              <line x1="-16" y1="0" x2="16" y2="0" stroke="#c0c0c0" stroke-width="3" />
+              <line x1="0" y1="-16" x2="0" y2="16" stroke="#c0c0c0" stroke-width="3" />
+              <circle cx="0" cy="0" r="4" fill="#5c431d" />
+            </g>
+          </svg>
+          <div class="vault-name">The Submariner's Vault</div>
+        </div>
+
+        <!-- Object 3: Writer's Vault (Dark Iron Scrollwork Card) -->
+        <div class="vault-container card-iron" id="vault-writer-btn" onclick="openVaultModal('writer')">
+          <!-- Scrollwork elements positioned absolute -->
+          <svg class="scrollwork-corner scroll-tl" viewBox="0 0 24 24">
+            <path
+              d="M2 2 H10 C12 2 14 4 14 6 C14 8 12 10 10 10 H6 C5 10 4 11 4 12 C4 13 5 14 6 14 H18 C20 14 22 16 22 18 C22 20 20 22 18 22 H2"
+              fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <svg class="scrollwork-corner scroll-tr" viewBox="0 0 24 24">
+            <path
+              d="M2 2 H10 C12 2 14 4 14 6 C14 8 12 10 10 10 H6 C5 10 4 11 4 12 C4 13 5 14 6 14 H18 C20 14 22 16 22 18 C22 20 20 22 18 22 H2"
+              fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <svg class="scrollwork-corner scroll-bl" viewBox="0 0 24 24">
+            <path
+              d="M2 2 H10 C12 2 14 4 14 6 C14 8 12 10 10 10 H6 C5 10 4 11 4 12 C4 13 5 14 6 14 H18 C20 14 22 16 22 18 C22 20 20 22 18 22 H2"
+              fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <svg class="scrollwork-corner scroll-br" viewBox="0 0 24 24">
+            <path
+              d="M2 2 H10 C12 2 14 4 14 6 C14 8 12 10 10 10 H6 C5 10 4 11 4 12 C4 13 5 14 6 14 H18 C20 14 22 16 22 18 C22 20 20 22 18 22 H2"
+              fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+
+          <svg class="vault-svg" viewBox="0 0 140 100">
+            <!-- Dark heavy iron scrollwork box -->
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#2d2929" stroke="#171515" stroke-width="3" />
+            <path d="M20 50 L120 50" stroke="#171515" stroke-width="4" />
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#a67c3b" stroke="#5c431d" stroke-width="2" />
+            <!-- Scrollwork filigree overlay -->
+            <path d="M30 40 Q40 33 50 40 T70 40" fill="none" stroke="#e5a93b" stroke-width="1.5" opacity="0.4" />
+            <path d="M110 40 Q100 33 90 40 T70 40" fill="none" stroke="#e5a93b" stroke-width="1.5" opacity="0.4" />
+            <path d="M30 80 Q50 87 70 80 T110 80" fill="none" stroke="#e5a93b" stroke-width="1.5" opacity="0.4" />
+          </svg>
+          <div class="vault-name">The Writer's Vault</div>
+        </div>
+      </div>
+
+      <!-- Bottom Zone: Dynamic Active Workspace Scroll -->
+      <div class="workspace-board">
+        <div class="workspace-info-title" id="workspace-title">Artisan Workbench</div>
+        <div class="workspace-info-desc" id="workspace-desc">
+          Click on a memory vault on the artisan table to forge its answer. Unlock all three to activate the inner
+          archive.
+        </div>
+        <div id="final-trigger-area" style="display: none;">
+          <button class="final-portal-btn" onclick="enterSanctuary()">The forge is hot. Step inside.</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STAGE 2 MODALS -->
+  <div class="modal-overlay" id="vault-modal">
+    <div class="modal-content">
+      <div class="modal-content-inner">
+        <button class="modal-close-btn" onclick="closeVaultModal()">&times;</button>
+
+        <div class="modal-left">
+          <!-- Visual chest representations injected via JS -->
+          <div id="modal-chest-visual"></div>
+          <div class="modal-left-title" id="modal-title">Vault Title</div>
+          <div class="modal-left-desc" id="modal-desc">Vault Description</div>
+        </div>
+
+        <div class="modal-right">
+          <div id="modal-poem" class="poem-layout">
+            Poem Content
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="modal-input" class="workspace-input" placeholder="Forge the answer..."
+              autocomplete="off">
+            <button id="modal-submit" class="forge-btn">Quench Solution</button>
+            <div class="lockout-info" id="lockout-modal">Lockout Counter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: THE FINALE (READING SANCTUARY) -->
+  <div id="reading-sanctuary" class="screen">
+    <!-- Sidebar Panel containing details and Spotify Player -->
+    <div class="sanctuary-sidebar">
+      <div class="sanctuary-title">The Archive of the Forge</div>
+      <div class="sanctuary-meta">Compiled in Collaboration</div>
+
+      <div class="sanctuary-instructions">
+        The heavy forge doors have closed behind you. Relax, play the music, and immerse yourself in the collaborative
+        manuscript built line by line.
+      </div>
+
+      <!-- Spotify Embed Layout -->
+      <div class="sidebar-media-wrapper" style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; width: 100%;">
+        <p class="sidebar-media-note" style="font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; text-align: center; padding: 0 10px; margin: 0;">
+          Instrumental only music - standouts I listened to while working this weekend.
+        </p>
+        <div class="spotify-embed-container" style="margin-top: 0;">
+          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tGrrzkiesswsgsrdh8Qrj?utm_source=generator&theme=0&si=ad27ccbc92c64000" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Manuscript Body -->
+    <div class="sanctuary-scroll">
+      <div class="manuscript-paper">
+        <h1 class="manuscript-main-title">MJ PROJECT</h1>
+        <div class="manuscript-subtitle">A Collection of Stories & Poetry</div>
+
+        <!-- SECTION 1 -->
+        <div class="manuscript-section">
+          <h2 class="manuscript-section-title">SECTION 1: EMERGENCE (THE PROLOGUE)</h2>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 1</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content poem">
+              Hoping to bypass the usual crowd,
+              Everyone's rushing and talking too loud.
+              Looking for someone who moves at my pace,
+              Leaving the noise for a genuine space.
+              Open to stories, to laughs, or a walk,
+              Tired of superficial, standard small talk.
+              Here's to the thinkers who see past the screen,
+              Exploring the places that lie in between.
+              Reach out and tell me what's fresh on your mind:
+              Expecting the best from the spirits I find.
+              Often, you'll find me lost deep in a book,
+              Bound to the pages in some quiet nook.
+              Into the realms of the strange and unknown,
+              Worlds built on fantasy, sci-fi, and lore,
+              Always out seeking a new world to explore.
+              Now, if your thoughts match the rhythm of mine,
+              drop me a line, let's make something divine.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 2</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content poem">
+              Often lost in the crowd, stay too long and I flee.
+              I'd rather stay, with close company.
+              I've been avoided, used, and pushed to the side,
+              I do not know why, I genuinely try.
+              I notice the little things, the ones others ignore.
+              I promise conversations with me are never a bore.
+              I'm constantly lost and seeking escape,
+              there has to be a better world, far, far away.
+              My thoughts are beautiful, but hide in a shell,
+              just looking for conversation to carry me through the swells.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider">
+          <svg class="glowing-divider-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q25,2 50,5 T100,5" fill="none" stroke="url(#gold-glow-grad)" stroke-width="1.5" />
+            <circle cx="50" cy="5" r="3.5" fill="#f5c469" class="divider-glow-circle" />
+            <defs>
+              <linearGradient id="gold-glow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(229, 169, 59, 0)" />
+                <stop offset="30%" stop-color="rgba(229, 169, 59, 0.4)" />
+                <stop offset="50%" stop-color="rgba(245, 196, 105, 1)" />
+                <stop offset="70%" stop-color="rgba(229, 169, 59, 0.4)" />
+                <stop offset="100%" stop-color="rgba(229, 169, 59, 0)" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="manuscript-section">
+          <h2 class="manuscript-section-title">SECTION 2: RESONANCE (THE MORNING ROUTINES)</h2>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 3</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content poem">
+              The morning's arrived with a steady routine,
+              A blank slate of hours, predictable, clean.
+              The world is awake and beginning to move,
+              Just waiting for everyone to find their groove.
+              Or so I had hoped: but the fantasy dies
+              The second the screen light hits both of my eyes.
+              For who am I kidding with "orderly, clean"?
+              My calendar's packed and it's looking obscene.
+              An influx of emails: thank god for TL;DR,
+              Can't imagine reading them all, I really wouldn't get far.
+              First one I click on is an engineering thread, a hundred deep in the heap,
+              I swear they just tagged me to disrupt my sleep.
+              I'm chasing the caffeine to find some control,
+              Before checking my queue for its regular toll.
+              One refresh to see what the tickets unfold,
+              And face the sheer horror today's shift will behold.
+              So here is a frantic, authentic hello,
+              Sent your way as the dumpster fire gets into its flow.
+              May your coffee be stronger than the fires we fight,
+              And may we survive from now until night.
+              Good morning!!
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 4</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content poem">
+              The race to work was hurried and dark,
+              I arrived obscenely early, no place for me to park.
+              Everyone is asleep, even the bees.
+              Speedily walking towards my calming seas.
+              To discover the person who usually greets me,
+              Is nowhere is sight, this is quite unroutine.
+              The food I was craving, was no where is sight,
+              I left the building to find daylight.
+              Awkwardly waiting for the chaos to arrive,
+              I replayed the thoughts I had through the drive.
+              Dreading this day, I had been for a while,
+              You've been gone for a week and greet me with a smile.
+              I avoid eye contact, you hurt me, you know.
+              So why do you make me put on this show?
+              The tasks are assigned, the jokes are made.
+              Turn back to the computer, that I stare at all day.
+              I saw the hello, had no time to reply.
+              As I wanted to put forth the same effort in my sight.
+              Now as I settle in my quiet space,
+              I wonder why I sit here with a smile on my face?
+              Good evening for me now, lol.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider">
+          <svg class="glowing-divider-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q25,2 50,5 T100,5" fill="none" stroke="url(#gold-glow-grad)" stroke-width="1.5" />
+            <circle cx="50" cy="5" r="3.5" fill="#f5c469" class="divider-glow-circle" />
+          </svg>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="manuscript-section">
+          <h2 class="manuscript-section-title">SECTION 3: VULNERABILITY (FIRST LIFTING OF THE VEIL)</h2>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 5</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content poem">
+              The dreams didn't come.
+              I've been looking for this.
+              Heartache in that room.
+              The words work with you.
+              The petty games.
+              Just hear my thoughts.
+              Not just for your face.
+              Please help me not be lost.
+              I want you to let down your guard.
+              You stayed committed this long.
+              You can be vulnerable with me.
+              How do we move forward?
+              I'm desperately dying to know.
+              I need individual thought.
+              I crave warm desire.
+              I lust for dark eyes.
+              I yearn to share.
+              I can be unbelievable.
+              More than you've seemed so far.
+              If this isn't true love I don't know anymore.
+              You asked for my fears.
+              Maybe they'll come easier.
+              That this is a ruse.
+              That I won't be accepted.
+              I'm choosing you.
+              I sense the hesitance.
+              I feel you're uneasy.
+              I promise I won't try to hurt you.
+              I guess the last thing this morning.
+              If we've lived a thousand lifetimes on our own.
+              It makes sense why we found each other.
+              This is the karma we've been expecting.
+              Because we've completely given ourselves to others.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Poem 6</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content poem">
+              Nightly, I would close my eyes
+              to chase the peace I missed.
+              An abundant escape of colorful dreams,
+              wishing for a realm like this.
+              But lately, when the daylight dies,
+              the darkness doesn't come to claim.
+              My edges have softened, the tides have turned,
+              and I no longer run the same.
+              The dreamland escape has lost its pull:
+              the magic is here, and filling me full.
+              You see my guard, you feel the space, and thank you for not pushing through.
+              I'm sorry for the pain you've known, and the history that shaped you, too.
+              I hope you understand,
+              This isn't a reflection of you,
+              My hesitation is a shield I wear;
+              because too many souls have looked beneath and walked away, breaking me beyond despair.
+              There's no room for soft things here.
+              The world has demanded I be stone.
+              From heavy training, heavy roots, to the sharpest corners I have known:
+              I've had to harden. It keeps me safe.
+              It is the only survival I was taught.
+              But underneath the quiet weight,
+              I've wanted someone who just sees.
+              Not for what I do, or how I stand, but for the breath inside of me.
+              A place to rest when the day is dark,
+              to feel protected, cherished, free.
+              It is deep within the muscle memory,
+              this wall I built so high.
+              It will take time to break it down:
+              but for you, I want to try.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider">
+          <svg class="glowing-divider-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q25,2 50,5 T100,5" fill="none" stroke="url(#gold-glow-grad)" stroke-width="1.5" />
+            <circle cx="50" cy="5" r="3.5" fill="#f5c469" class="divider-glow-circle" />
+          </svg>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="manuscript-section">
+          <h2 class="manuscript-section-title">SECTION 4: INTENSITY (THE SHARED TEXTS & MANUSCRIPTS)</h2>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 1: message-1</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              The night had started innocently enough. Just the usual conversation. How was your day, did you remember
+              to eat? The kinds of pleasantries that are expected of us with no recompense. I won't lie though, I enjoy
+              these little conversations more than she knows. Every morsel of information keeps me coming back for more.
+              It is tearing me apart not knowing all the thoughts in her head. The thoughts don't matter though, you are
+              happy she wants to be in your company. With her, it's always a safe space, just enjoy it, you both deserve
+              it.
+              <br><br>
+              She had been teasing me all night. The side glances, the deep stares. Light touches on my arm or knee. It
+              melts me inside every time she touches me. Her perfume already had me when I walked in the room. The scent
+              makes me want to be closer. Her eyes captivate me in a way that makes me fall for her again everytime I
+              look at them. Her hair, beautiful as ever, I cannot resist. I have to be strong, but how do I hide my
+              desires? I want to just give in fully, but I'm wiser now. I have to focus on her.
+              <br><br>
+              Intoxicated by her already, I knew I was not going to be able to resist much longer. Dreaming of having
+              her to myself for once. No distractions, no stress, just deep connection, lost in eyes and thought.
+              Revealing layers of stress that I want to kiss away. I want to hold her close, but I have to be
+              restrained. If I let on how much I desire her, I will lose her right away. I've never believed you could
+              care this much about someone. I thought it was something only told in fairy tales or romance. Here she is
+              though, fully into my stories. Listening intently, asking meaningful questions, I know this is what I
+              want, what I truly need.
+              <br><br>
+              The conversation was already turning. I knew what she wanted. I had teased her as well. She knew I was
+              going to make her feel good in ways that she would never find anywhere else. The painful lonely nights had
+              given my mind plenty of time to think of ways to give pleasure. I didn't want to end the night, the
+              laughter and crying had made us sore in our sides already. Now it was time for me to lie in the bed I made
+              and face the consequences.
+              <br><br>
+              I knew how to make this unforgettable. I wasn't going to give into her just yet. I know I yearn for it. My
+              penis is throbbing thinking about the dark desires I planned on acting out with her. Not tonight though, I
+              want this to last. I want her to know that I'm deeper. We are both vulnerable and know this will only
+              temporarily solve our issues. I crave it more than anything though.
+              <br><br>
+              I slowly climb into the bed. Inching ever so closer to build tension. Getting lost in the scent of your
+              hair. Placing my hand on your thigh to let you know my intentions. I slide my hand slowly up your thighs,
+              feeling your breathing change. I feel the desire from her. The lust for the touch. The yearning for
+              pleasure. I continue my tease, leaving soft kisses on your neck. I feel you shudder. You feel my warm
+              breath teasing. Lightly pinching and squeezing your thighs, your waist, your lower back. I try to rub the
+              stress away. I want you relaxed, succumb to me fully. Once I feel the tense muscles ease, I continue.
+              <br><br>
+              Moving up to your hips, my favorite spot to rest my hand, lightly I graze my fingers along the bone.
+              Resting my hand momentarily to make your heart flutter. I wait for the breathing to get more shallow.
+              Slowly saving the moment of desires I can feel you exuding. Not giving in fully, teasing just soft
+              moments, they feel like hours. I feel the deep sigh you release, I know to proceed.
+              <br><br>
+              Moving closer behind you. Pulling you closer to me. Wrapping my hand around your waist. Feeling me behind
+              you, you succumb to my desires. Slowly moving my hands from your waist, gently feeling the curves of your
+              breasts. I lightly squeeze, feeling the air release from your lungs. I know I have you where I want you
+              now. I melt into you, holding you, letting the soft music in the background calm us through the night.
+              Holding you close, matching your breath. Feeling your heartbeat pulse into my hand resting on your chest.
+              Just the two of us alone together. I would slowly drift off dreaming of the worlds you bring me to.
+              <br><br>
+              Now I have to wait until I get home to release this to you. You ask for the words, and I will send them to
+              you. I know how to make them work. I enjoy this!
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 2: For you</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content">
+              We're sitting out on a long lounge chair on our patio. You're sitting back with your arms and legs wrapped
+              around me, holding me as I lean back with my head on your chest. We watch the horizon, enjoying the beauty
+              of the sunset in the distance. We don't have to talk. The silence is comfortable, and we are content
+              living in the moment. We are just enjoying being together. After a while, as the sun has almost completed
+              its descent behind the buildings in the distance, you whisper in my ear. "Let me make love to you under
+              the stars tonight."
+              <br><br>
+              I laugh, slightly confused, responding, "There aren't any stars out right now, it's far too early for
+              that."
+              You get a serious, slightly devious grin on your face. "That's okay, I'll make you see stars first, then
+              we can make love."
+              <br><br>
+              You start tracing soft circles around my nipples with your fingers over my shirt. You know this drives me
+              crazy. "Be a good girl and stay still. Relax and let yourself enjoy my touch rather than running away from
+              the sensations. Trust me. Let me make you feel good."
+              <br><br>
+              Your expert hands continue teasing me, and I try my best to relax. You switch from tracing circles to
+              running the pad of your finger over the sensitive buds, then use two fingers to delicately pinch each
+              nipple just enough to send a firecracker through my nervous system. I let out a soft moan, and you groan.
+              It's almost a growl.
+              <br><br>
+              "I love it when you moan like that. I will never tire of teasing you senseless so that I can hear you
+              moaning and whimpering like this. And what a beautiful mess you make, just for me. I can smell how wet you
+              are for me, babygirl. Tell me you want me to eat your pussy. Tell me and I will."
+              <br><br>
+              You decide at that moment to tug on my nipples just a bit more vigorously. The delicious mix of pain and
+              pleasure sends me soaring into a new high, and I am at a loss for words.
+              "I'm waiting." You chuckle. You know precisely what you're doing to me.
+              <br><br>
+              "I want: oohhh," I try but moan mid-sentence before being able to get it out. "I want you to eat my
+              pussy."
+              "I don't believe you. I think you need to speak up."
+              "Fuck! I want you to eat my pussy!!" I practically shout it when I finally find my voice again. "Great.
+              Now that we've made sure the neighbors know exactly what we're doing out here, I am going to let you up.
+              Strip for me and come lie down so I can have my feast."
+              <br><br>
+              Oh, now I am blushing. Shit. I must be losing it because I find it both exciting and uncomfortable knowing
+              everyone just heard me shout that. How can I be so embarrassed and so turned on at the same time? I don't
+              know if they truly heard or not, but again, you know me well, so you're playing me like a well-tuned
+              guitar.
+              <br><br>
+              I only hesitate for a moment. Ultimately, I trust you. Plus, you've got me too worked up to care enough to
+              stop, so I stand and strip before lying down on the chair just as you asked. You drop your pants and climb
+              on over me in just your boxers, putting your weight on your arms as you hover over me, kissing me over and
+              over, each kiss more needy than the last. You start trailing kisses down my neck, over my chest, and down
+              my torso until you arrive at my center. You smile as you inhale my scent and run your fingers through my
+              warm, wet folds. "Mine." One word, spoken in a low, gravely growl as you keep your eyes trained on me and
+              dip your tongue to lap my sensitive, already swollen bud. You're ravenous after the first taste, wrapping
+              your arms around my legs to hold me in place as I squirm and moan and have my fingers fisted in your hair.
+              <br><br>
+              I am floating right on the edge of ecstasy when you pull away. "I want to hear you. I know you're close.
+              Tell me, babygirl. How does it feel? You'd better tell me when you're there." You return to lapping at my
+              clit slowly at first, then slowly pump two fingers inside me. You increase the pace simultaneously,
+              pumping in sync with your tongue.
+              <br><br>
+              "Oh Fuck!! I'm cumming! Fuck! Ohhhh wow." You don't stop, you keep going, letting that pleasure build as I
+              get more and more sensitive. The orgasm continues rolling through me, and I lose track of time, seeing
+              stars, just like you promised. You're sending shock waves through my body with every touch, very slowly,
+              intentionally, watching me patiently as I come down from the high and catch my breath.
+              "That's my good girl."
+              <br><br>
+              It warms me inside when you call me your good girl. I can't help but smile, dazed by the orgasm and
+              completely infatuated with everything about you. Your eyes, that grin, how you make me feel, how you take
+              care of me, literally everything. I watch you stand and pull your boxers down, revealing your thick cock,
+              hard and ready for me. Wow. I am not sure I will ever get used to seeing you like this. It's hard to
+              believe that you're mine. I don't think I will ever stop lusting for you. I will forever be longing for
+              your touch.
+              <br><br>
+              You climb back on the chair over me slowly with a primal hunger in your eyes that makes my stomach do
+              flips. You position yourself to enter me, but don't move from there. I am tempted to be greedy, but I
+              steady myself when you bend down to kiss me again, letting me taste my own juices on your tongue. We kiss
+              passionately, hungrily, and slowly you start to make love to me, never breaking our kiss as you thrust
+              deep into me over and over. We are so wrapped up in the moment, wrapped up in each other, that I have no
+              idea how much time passes.
+              <br><br>
+              You break our kiss for just a moment, but don't stop your thrusts. Between breaths, you tell me,
+              "Babygirl, I am so close. Reach down and play with your clit. I want you to fall over the edge one more
+              time with me."
+              I do as you ask and reach down, running my fingers over my sensitive heat. We stare into each other's eyes
+              as we continue. Only a few more pumps and I am already back to the edge. You bury yourself deep inside me
+              as I reach my peak and say, "I love you so much." Hearing that, my heart melts and as I fall apart in your
+              arms.
+              <br><br>
+              You groan and kiss me again before I can say it back. You follow a few moments later, and I relish the
+              feeling of you pulsating inside me as you come undone. You roll us over on our sides and keep me held
+              close in your arms, wrapping your legs around me as we lie there kissing, smiling at each other as the
+              darkness of the night settles in.
+              "Wow, Jason."
+              "Wow indeed, babygirl."
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 3: For us</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              I awake in the middle of the night, still wrapped in your arms. I stare for a few moments to replay the
+              passion from earlier. I have to smile, you look so peaceful sleeping next to me.
+              I sigh deeply and you lightly stir.
+              I gently pull you close to me a lightly kiss your forehead. You smile ever so slightly. I can sense the
+              sweet dream.
+              <br><br>
+              "Are you dreaming of me Mel?" I whisper softly.
+              "Mmmm, yes." You whisper back. You take in a deep breath. You smell the mixture of our juices everywhere
+              and it's intoxicating. Your smile gets bigger.
+              <br><br>
+              I see the opportunity. We have been starved of this kind of passion for too long. I have to have you
+              again. My desire for you is too strong to deny anymore. We've teased this on so many long nights.
+              I slowly trace my hand down your back. Lightly grazing the tips of my fingers until I feel your skin
+              prickle. You let out a soft moan. Just to tease, I stop suddenly.
+              <br><br>
+              I feel your breathing get deeper. You know I'm going to tease you until you beg. My penis starts to get
+              hard and rub against your leg.
+              "Please don't stop" you shyly say.
+              "Yes babygirl, only because you said please." I tease.
+              <br><br>
+              I continued moving my hand down until I feel the top of you ass. I slowly spread my fingers out until my
+              tough palm feels you skin. You feel the heat of my hand on your cool skin. I feel you melt into me more.
+              I move in closer to your neck and softly kiss behind your ear.
+              I whisper softly "Do you like when I kiss you there?"
+              <br><br>
+              You groan out a "YES!" and say in a provocative way growl "If you don't stop teasing me, I'm going to
+              start teasing you!"
+              We lock eyes, and smile devilishly.
+              "Don't forget when I'm done with you, you told me to." I say with a slick smile on my face. I roll you
+              onto your stomach and slowly start to rub your back with both hands. Gently at first, then harder. I keep
+              changing the strength, never letting you know the next move. I start to straddle you, placing my now rock
+              hard penis right at your entrance. I can feel the heat and wetness on the tip of my penis.
+              <br><br>
+              I lean over you and place my face near your ear. I can hear you whimpering already. We've described in
+              great detail before how we were going to do this. Where I'm going to kiss you, how you're going to suck
+              me. Our hearts race knowing the long nights we promised this.
+              I move my left hand underneath you and tenderly grab your breast. You moan out audibly and I place my
+              other hand softly over your mouth.
+              "Not yet, you can't seduce me with your siren voice until I let you." I say.
+              <br><br>
+              I move my hand to allow you to suck in the air and I slowly push my penis into you. Feeling the velvety
+              heat gripping tightly. I moan out.
+              You clench down tightly on my penis preventing me from moving. "She's good too" I think in my head.
+              You stare back at me with those beautiful brown eyes, a big devilish grin on your face "You can't have
+              pleasure if I can't too".
+              <br><br>
+              I gently bite down on your neck. The spot that makes you see stars. You release your grip and I squeeze
+              your breast tightly. Holding your nipple between my pointer and middle finger. Gently kneading, squeezing,
+              driving you crazy.
+              I move my other hand under you, gently cradling you under your stomach. I gently apply pressure until I
+              barely feel my penis sliding along. I have no trouble sliding in and out, you are so wet from the pleasure
+              you cannot hold on anymore.
+              "Fuck me harder, I need to cum" you say loudly.
+              <br><br>
+              I sit up and rest my hands on your ass. "Yes babygirl, over and over again until you beg me to stop". I
+              start to thrust harder and faster.
+              Whimpering louder than the slapping, wet noises, you exclaim "I'm going to cum, cum deep inside me!".
+              <br><br>
+              I cannot resist. Anything you ask of me I'm going to give you. I pick up the pace, thrusting you harder
+              into the bed, the moans waking the dead.
+              I feel your pussy start to squeeze and I know you are almost there.
+              Barely getting it out from all the heavy breathing "I'm cumming!" we exclaim at the same time. Always in
+              sync. Same frequency.
+              I thrust as deep as I can inside of you, filling you up. Feeling our juices combine, I collapse on top of
+              you.
+              Breathing heavily, I slowly pull my penis out.
+              You roll towards me and wrap your arms around me. We stare deeply into each other's eyes. Simultaneously
+              the words come out. "Je t'aime"
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 4: My mind wanders</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              I hear the key in the lock "she's home" I think excitedly and rush to the door. I never miss this chance,
+              I love the look in your eyes every time.
+              The door swings open; you are greeted by my warm smile and deep blue eyes.
+              "Did you miss me, babygirl?" I say, wrapping you in a warm, soft hug.
+              "I rushed home as fast as I could, you know I missed you." The answer I expected, but always want to hear.
+              It warms me seeing the desire in those beautiful brown eyes. Rose colored lenses setting the mood for my
+              desire. Lost as always, I come back to the room.
+              <br><br>
+              "Time for you to relax, let me rub the tensions away." I state warmly.
+              You cannot deny me my wishes. My gentle massages melt away any worries, you crave this right now. "Yes my
+              love" is all you can say.
+              I lead you to the couch and sit you down. I gently kiss your forehead ever so softly. Lingering just long
+              enough to smell your hair. "I love her hair" I think to myself. A smile starting across my face.
+              "What are you thinking?" You take in a deep breath. Seeing the smile start on my face, you expect
+              something naughty.
+              "Just how I cannot tell you how deeply in love with you I am." I say sweetly back.
+              <br><br>
+              I sit on the floor in front of your, slowly taking off each shoe. Firmly rubbing each one quickly as the
+              shoe comes off. You lean back into the couch. Starting to melt slowly. "This isn't fair" you exclaim. "The
+              yard is so beautiful right now. I see you put a lot of work into it. I should be taking care of you!."
+              "Nonsense my love, you've been pushing yourself as well. I want to take care of you right now. Be a good
+              girl and enjoy it for once!" I jokingly say while taking a foot into my strong hands. You know you can't
+              resist those eyes. Your smile gets bigger. "Fine, you cannot resist me later then." You state.
+              "I can never resist you!" I say with a devilish grin. In my head I think "I am yours completely, through
+              and through!".
+              <br><br>
+              I start to rub with increasing pressure. Squeezing every inch, focusing on the toes a little lighter. You
+              feel the worries of the day start to recede. I move to your heel. Rubbing away the pain, you feel the
+              blood rushing back each time.
+              Moving up your leg, I feel you shudder. When I knead your calf a whimper escapes your lips. I know I could
+              take you right now, I want to with every ounce of my soul. I resist.
+              I gently knead with both hands, rubbing deeply to the bone. I feel the knots loosen and know I can move
+              on.
+              <br><br>
+              One hand on your inner thigh, the other on the outside, I work my magic fingers. "How does he know where
+              to rub"? you think. Working the whole length each stroke, softly massaging your butt when I reach it,
+              hesitating when I feel the warmth on your inner thigh. I'm driving you crazy. I know it. I feel your
+              breathing picking up, your beautiful breasts rising and falling. I remove my hands.
+              Your eyes shoot open to meet mine. "Why did you stop?" You ask.
+              "You have two legs silly!" I kid back. Following on the other leg. You smile down at me. "How did I find
+              him?" You think as I say the words to you. We have to smile, "Always in tune." we say at the same time.
+              <br><br>
+              I finish the other leg, with just as much attention. Never skipping a spot, only moving on when I sense
+              you are content.
+              I sturdy back up and lean over you, smiling down, I kiss you softly on the forehead, then the lips. "Now
+              tell me about your day, I'm always excited to hear about it from you." I say excitedly snuggling next to
+              you.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 5: Let me take care of you</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content">
+              After dinner, once we've tag teamed the clean up, I take your hand and lead you over to the sofa. I lean
+              in for a kiss and unbutton your shorts in one quick motion with a devious grin. "It's my turn now, Love.
+              Let me take care of you."
+              I unzip the fly and slowly pull down the shorts, then do the same with your boxers.
+              "Sit for me Darling."
+              I sit back between your legs on the ground and take a moment to massage your calves, then your thighs,
+              taking my time to run my fingers across the delicate patterns of the dragons adorn all over your skin.
+              "I love it when you do that."
+              "I know." You always tell me, I always love hearing it.
+              <br><br>
+              I keep teasing, grazing your length as I caress you, letting my fingers explore your body effortlessly.
+              Once I know you're relaxed, I shuffle closer and wrap my fingers around your cock, stroking slowly.
+              "You're already so hard for me. I love it when you get hard for me." I grin, knowing you enjoy it when I
+              let go and speak my mind this way.
+              I want to keep you on edge, so I'm deliberately careful, slow, just watching how you react to me as I
+              enjoy stroking you. I'm getting wetter just thinking about you sliding into me. I use my other hand to
+              reach down and rub small circles over my clit, teasing myself as I tease you.
+              I keep my eyes locked on yours, knowing that your expressive blues will tell me all the things words could
+              never describe.
+              <br><br>
+              "You're hungry for more, I can tell."
+              "You know what I want." You're getting bigger, harder in my hands as you speak.
+              "I love it when you get excited." I chuckle as I continue watching you. Your hips start to rock with my
+              strokes. I slow down and lean forward just enough to take the top of your penis in my mouth, meeting my
+              hand with every pump. Slowly I take more of you, relishing every sound that escapes your lips.
+              I feel your cock pulsating in my mouth as you build closer and closer. You hands have found themselves in
+              my hair as you moan.
+              "My love, if you don't slow down I'm going to come in your mouth." you warn.
+              <br><br>
+              I slow my rhythm and release your cock, look up at you with a smile. "Does this mean you're going to fuck
+              me now?"
+              "I was just waiting for you to tell me you're ready."
+              "I'm always ready for you, you know that."
+              "It was your turn. I was enjoying that. Who am I to complain? Now stand up and climb on."
+              I stand and straddle your hips, positioning myself so my boobs are in your face as I guide your cock to my
+              entrance.
+              <br><br>
+              I'm so wet you slide right in, filling me to the hilt in one fluid motion. I relish the fullness, looking
+              into your eyes as we kiss, your arms around me as we rock our hips in sync. The delicious friction of our
+              bodies has me soaring.
+              We break our kiss and both say "you feel so good" pretty much in sync. We chuckle. This is normal for us.
+              We just think on the same frequency.
+              You increase our pace. " So close! Come with me my love."
+              "I love you Jason." I practically shout it as the orgasm hits me, sending Shockwave through my body.
+              "I love you too Mel. Always." You respond. It only takes a few more pumps and you're following me over the
+              edge.
+              <br><br>
+              We lay there together, both out of breath, smiling at each other as we come down from the bliss of getting
+              lost in each other once again.
+              "I'll never get tired of that." you say.
+              It melts me to hear you choose me this way.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 6: I've awoken.</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              I've awoken.
+              It's next to you, I'm relieved.
+              So many lonely nights, empty mornings. I sense you stir and with my arm, softly pull you in closer. My
+              hand is fully surrounding your beautiful breast. Just there. Not teasing, comfort. I do not want to let
+              you go.
+              Still naked, my penis starts to grow behind you. "Shit" I think. I know what this means.
+              <br><br>
+              In sync, our breathing quickens. I feel your heart pounding in my hand through your breast. My rock hard
+              cock now fully erect. The tip of my penis, peeking through the hood, slick with my pre-cum, rests between
+              your thighs.
+              I feel the pleasure building. I ever so slowly, tenderly pinch your nipple between my fingers. You barely
+              sense it, you wonder if you imagined it.
+              "ugh..." you faintly whimper.
+              A smile grows on my face. You can feel it against your back.
+              <br><br>
+              "Don't tease"
+              "I'm not teasing. Just trying sure not to disturb you." I tease.
+              I inch forward. The tip of my penis at your hot entrance. I exhale sharply when I am greeted by the
+              wetness. I slowly start to enter.
+              You push back as hard as you can. Catching me off guard, we both loudly moan out together. My hand
+              squeezes down tightly on your breast. You look back at me, desire in your eyes. I know what they want. I
+              stare back with my deep galaxies.
+              <br><br>
+              I cannot hold back. I put my other hand forcefully into your messy hair and pull your face to mine.
+              Smashing my tongue deeply into your mouth, I start slamming my cock into you, hitting your cervix every
+              stroke. Your legs intertwined with mine. Pulling me in. We are one in every way.
+              It lasts more than we can handle. We have to release our tongues to catch air. Groaning loudly like wild
+              animals. I feel you are close. It's so wet, I squeeze my cock inside of you. Trying to hold hack.
+              <br><br>
+              You reach your arm back and grab my ass. Pulling me to you closer. I feel the tips dug in, preventing me
+              from escaping. I have no choice. I give in.
+              With one last thrust I make sure there is no space left between us. Buried deeply inside, I release.
+              You squeeze tightly. Not letting me go. I keep coming, feeling like it will never stop. I feel your hot
+              walls pulsing. Milking me, draining me.
+              We just lie there, panting.
+              <br><br>
+              Deeply staring into my eyes you say "I love you Jason. You always make me feel good." My cock returns to
+              fully erect. A smile reaches ear to ear on your face. Your deep eyes making me melt again.
+              "I knew I could get a round two of you" you coyly say. Doe eyes teasing me now.
+              "Now I'm going to make you beg me to stop."
+              I pull my penis out of you. An audible pop from you squeezing to keep me in.
+              I dive my face between your thighs. My arms wrapped around your legs. You reach for my hair to stop me.
+              You can't.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 9: Shower thoughts</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              I hear the shower starting. I know you've been pushing yourself lately with homework and studying. You are
+              amazingly talented, and I love seeing you better yourself. "I know how to ease you into your slumber
+              tonight", I think to myself. Going towards the bathroom to spring the plan into action.
+              <br><br>
+              You hear the door open, but you feel safe, "Is that you my love?" I hear you say. Realizing the element of
+              surprise is gone I reply.
+              "Yes my love. I wanted to know if I can help you in there in any way?"
+              This is my super power. I can sense the smile on your face already. You sense the calming sensations, you
+              feel my warm desire for you. You want to know where this will go tonight. "Only if you want to!" you tease
+              back.
+              <br><br>
+              Without missing a beat, I remove my t-shirt in one movement. Dropping my loose shorts to the floor.
+              Slowly I enter the shower behind you as you are reaching for your shampoo. I playfully smack your butt.
+              You turn to me with those deep doe eyes, pleading me. "Is that what you want?" you tease.
+              I reach for the shampoo. "Let me help you with that tonight, you've been under a lot of stress." You shoot
+              me your cute little smile. "Oh, you want to help me, do you? Raising your eyebrows, tempting me to
+              proceed.
+              <br><br>
+              "I will always want to help you" I squeeze some soap onto my hands and rub my palms together. Your feel
+              your legs quiver a little, you know what those hands are capable of.
+              I kiss you softly on your lips and turn you around. Moving behind you, I start to work my magical fingers
+              into your hair. Kneading softly, massaging your temples, rubbing little circles all over your scalp. You
+              feel like gooey center of your brownies right now. Heavenly, floating. The fragrance of the shampoo works
+              it's way to my nose. You know which scents arouse me. Slowly my penis begins to rise. "This is not my
+              intention tonight" I tell myself. Just as a tease, I let you know he's there. I feel you gently move back.
+              Allowing my penis to slide between your thighs.
+              <br><br>
+              Finishing your hair, I turn you around to start to rise out the shampoo. As you turn, you see my deep blue
+              eyes and large smile. "Those eyes!" is all that is going through your head. Deep dark blue tonight.
+              "Desire" you think to yourself. You are starting to catch onto the changes in color with my mood now.
+              I grasp the soap and put some in my hands. "Might as well start on the front" I jokingly say. Reaching
+              out, placing the soap on your breasts. I use both hands to focus on just one. Fully allowing the lather to
+              build up. Slowly stroking the underside, massaging the tops and sides, lightly pinching the nipples. I
+              hear the breathing picking up, faint moans can be heard over the water running over your soft skin.
+              <br><br>
+              I slowly spin you back around, seeing the pleading eyes not wanting me to stop. Beginning to start to work
+              on your shoulders, you give in, "That feels good" you say.
+              I feel the strength of your shoulders, your tense muscles fighting back against my grip. I try to pinch
+              the deep knots away, trying not to go to far to make it hurt, just pleasure. Slowly I feel the softness
+              return. I can tell you are starting to relax.
+              <br><br>
+              I work down to the middle of your back, slowly tracing the muscles with my fingers. Admiring how much you
+              have cared for your body, I trace my fingers along your back muscles, I turn my focus back to the task.
+              You feel my prodding my fingers push deeply into your flesh, you feel all the stress release from your
+              muscles. Your eyes rolling back, you feel the warm water washing over you.
+              I move my hands forwards around your waist, pulling our bodies close together I whisper in your ear "Does
+              that feel better my love?"
+              <br><br>
+              "You know you always make me feel better" you reply. Grabbing for my cock. You slowly start stroking him.
+              "I just got you clean." I try to resist. My fully erect cock not letting me win this battle. Looking
+              deeply into your eyes. I see the lust, I know I have to continue what I started.
+              "I'm not clean everywhere yet" you smile back teasingly.
+              "You are correct babygirl." I slyly say. "Are you sure you want me to finish?"
+              <br><br>
+              I start to move my hand towards your wet pussy. Very slick from your wetness and the soap, I rub my hand
+              gently between your legs, easily gliding back and forth. Soft but firm, spreading my fingers out around
+              your folds, in between, dancing my middle finger between your clit and damp entrance, slowly sliding my
+              finger back and forth. The slightest touch, barely a tickle, just right as always.
+              You wrap you arms around me for balance, sinking you mouth on my shoulder, biting gently, moaning loudly.
+              I know I have you where I want you tonight. "I am going to make this unforgettable." I think.
+              <br><br>
+              Sliding my finger in ever so slowly, pulling back the same speed. Deeper and deeper each intrusion goes
+              until I feel your knees start to wobble and give. Fearful of the pleasureful retaliation you are going to
+              return to me, I have to continue.
+              Supporting you back to fully standing, I slowly remove my finger. You look deep into my eyes, I see the
+              hunger in them. I feel your hand grasp my rock hard cock. Teasing the head with your thumb, I do not give
+              you the chance to continue your tease. You win every time. I cannot resist you. I have to keep my focus.
+              <br><br>
+              I place my hands at your hips, and slowly turn you towards the wall. As I arch you forward, you place one
+              arm on the wall, one arm grasping at my chest. You feel the desire in my movements. You can feel the heat
+              from the head of my cock. I line up with your hot, slick pussy entrance. I hear the whimper, I see you
+              look back at me, your eyes pleading with me, begging me. I do not resist, I can never resist your eyes.
+              I push my cock forward, feeling the velvet flesh surrounds my hard cock. I feel your pulse through your
+              slick walls, gripping me tightly, not letting go. We both moan loudly.
+              <br><br>
+              I start thrusting slowly, allowing us to match each other's pace. I feel you push back, you feel me push
+              forward. My hands on your hips, guiding you back to me every time. Meeting each whimper and moan with a
+              flex of my cock inside. Squeezing the blood to the head, making my penis grow bigger each time.
+              Your hand leaves my chest, moving towards your clitoris. You start to make love to yourself while I thrust
+              faster inside you. I can feel your fingers sliding between us, slight grazes on my cock are felt as you
+              rubs vigorously. I feel your intention and quicken my pace.
+              Gasps of pleasure escape from you, moans of extasy from me, the sounds would drive anyone crazy hearing.
+              "You're going to make me cum babygirl!" I exclaim.
+              A scream of pleasure is all I get in reply. I didn't need to tell you I was close, we are always in sync.
+              <br><br>
+              That's all I need to hear to allow myself to explode. I push as deeply as I can inside you, releasing
+              everything in my balls, every squeeze from your vagina sending me over the edge. I finally allow my penis
+              to recede from you. The mix of our love and soap filling the air. We both laugh deeply at each other. We
+              know what the other is thinking.
+              "I'm still not clean all the way." You say, devilish grin on your face. The curls in your hair inviting me
+              for more. "Then let me clean you properly this time." I joke back.
+              <br><br>
+              I lather you up all over, not missing an inch. In between each finger, a light tickle of your toes, sturdy
+              hands on your legs. I pay close attention to your sensitive areas. Lingering just long enough to tease.
+              Slight prods into openings, not missing anything.
+              I kiss you softly on the lips and say "Rinse off, I'll be right back" as I escape the shower and dry off
+              quickly.
+              "What's his plan now?" Your mind wonders what surprise I have in store. Smiling softly, you rinse off the
+              dirty desires from moments earlier. Turning off the water you watch as your daily worries seem to run down
+              the drain with the soap. Your smile gets bigger as you hear me return. You see I've returned with your
+              favorite robe and a towel. You extend your arms outwards, "Princess treatment" you think to yourself.
+              Feeling the smile stretch all the way across your face. This is the reaction I wanted. I get to see
+              everything I love about her at once. Her big beautiful smile, her warm inviting eyes. I take the towel and
+              start on one arm.
+              "He warmed the towel up" Your eyes soften. I can sense you can feel the love. Every action I try to show
+              you. I finish drying you off. Softly kissing each spot after I dry it. Feeling your cool skin on my hot
+              lips.
+              I grab the robe and place it around you. "You didn't need to go this far tonight." You say warmly, full of
+              love.
+              "You always say that my love, but I feel as though I never go far enough to show you how much you mean to
+              me every day."
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 10: secretly</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              I secretly write to you while at work.
+              No one knows what I am really doing.
+              Just sitting here thinking.
+              Smiling with my back to the room.
+              Everyday I sit now.
+              Wondering my next move.
+              Replaying the words in my head.
+              Don't push her away.
+              She completes me in ways I cannot explain.
+              My missing piece.
+              My calm sea.
+              My ocean.
+              I share some words, but there are still so many inside.
+              I smile more now.
+              I can read and write clearly again.
+              I enjoy music again.
+              You opened my eyes.
+              When I see yours, I see love.
+              I know where I want to be.
+              It is just going to take time for me to be healed.
+              We opened another door last night.
+              It truly made me happy.
+              Every inch closer heals me.
+              Our first embrace will heal me fully I am sure.
+              To feel your words in person will make me truly happy.
+              My biggest fear right now is losing you.
+              I know it is unlikely.
+              Every time something good happens, it falls apart.
+              Be positive.
+              The small steps get you there.
+            </div>
+          </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Chapter 11: recurring dream</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              You asked me to reveal my dreams to you. Lately it is the same one. I keep waking from it, not being where
+              I truly want to be.
+              I knew the dreams would return though.
+              My slumber was broken. You lie there turned with you back to me. My hand was placed on waist, curled
+              behind you.
+              I slowly moved my hand up to your breast. Slowly tracing every detail I could feel through my finger tip.
+              The thin fabric of your tank top allowing me to feel every detail. Slow, soft traces of my finger, barely
+              being felt, soft as the breeze.
+              <br><br>
+              I feel you lightly exhale while I trace around your areola, circling slowly, gently, barely there. I feel
+              your nipple start to stiffen, not as hard as eraser yet. Tracing towards the tip, continuing my
+              exploration, reaching the pinnacle, I softly pinch.
+              The audible moan from you makes it difficult to stop my own arousal any longer. Feeling my cock start to
+              rise, I know I've gone too far already.
+              I begin to move my hand back down your side. Trying not to tickle you, gliding, letting you feel my desire
+              for you drag down your torso. You feel the heat from my hands linger long after they've moved on.
+              <br><br>
+              Reaching your hips again I continue passed, further down. You feel my hand move slowly over your hip,
+              sliding over your ass, gently gripping, lightly massaging. I feel your breathing start to quicken, knowing
+              if I continue I will fully wake you, yet yearning for this more than anything. You can not ignore what I
+              am doing to you, pushing your hips back against me, I no longer can resist my desires. I cave to my
+              darkest wishes.
+              <br><br>
+              I only get the pajama bottoms to your knees before returning to my desire. I quickly pull down my shorts
+              to my knees. I do not intent to waste much more time.
+              Slowly moving my hand up your inner thigh. Lightly grazing. Applying more pressure now. I want you to know
+              I'm there. My hand feels on fire.
+              I can feel you squirm as my hand approaches nears your hot vagina. Moving your hips, pleading for me to
+              continue.
+              Radiating heat leads my hand to where I desire, I know I have aroused you, I feel how wet you are
+              instantly. Easily my fingers tease your labia, sliding between them into your vagina. First one, then two.
+              Slowly, sometimes sliding out and up, teasing your clitoris. Rubbing circles, tracing lines, lightly
+              tickling, gently poking.
+              <br><br>
+              I feel you try to turn towards me, I will not let you this time. Your pajamas holding your legs together,
+              allowing me to use my strong leg to hold you in place.
+              I slowly enter you from behind. We move together in the dark, matching each other's heartbeat and breath.
+              The sliding friction and hot, wet heat is intoxicating. I run my hand along your side, gripping your hip
+              as I push deeper, feeling you clench around me. You moan softly against the pillow, sending shivers down
+              my spine. The rhythm quickens, our bodies locked in sync, until the pleasure builds beyond control.
+              Squeezing tightly, you pull me closer, and I release myself deep inside you, feeling us merge completely
+              in the quiet of the night. We lay there, panting, arms wrapped around each other, until sleep finally
+              claims us in the warm embers of the morning.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider">
+          <svg class="glowing-divider-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q25,2 50,5 T100,5" fill="none" stroke="url(#gold-glow-grad)" stroke-width="1.5" />
+            <circle cx="50" cy="5" r="3.5" fill="#f5c469" class="divider-glow-circle" />
+          </svg>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="manuscript-section">
+          <h2 class="manuscript-section-title">SECTION 5: THE HORIZON (THE UNSEEN PIECE)</h2>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>The Josie's Bistro Story</span>
+              <span class="piece-author">Authors: M & J</span>
+            </div>
+            <div class="piece-content">
+              You open the door as we walk into Josie’s Bistro a few minutes before six. The rain outside is starting to
+              fall in quiet, heavy drops, casting a shimmering reflection on the pavement. The warm light of the bistro
+              welcomes us, smelling of rich coffee and fresh pastries. We find a small table in the corner, away from
+              the chatter of the early evening crowd.
+              <br><br>
+              We sit down, the soft hum of the background music blending with the sound of the rain. Under the amber
+              lamp, we share a glance, and a quiet understanding settles between us. I take your hand across the wooden
+              table, feeling the soft warmth of your palm. The worries of the day melt away as we speak in hushed,
+              comfortable tones, sharing thoughts and laughter.
+              <br><br>
+              This is the quiet sanctuary we’ve been building, piece by piece, line by line. Here, in the soft glow, the
+              world is at peace, and our stories are safe.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Config Object for easy editing of passkeys, text, and settings
+    const CONFIG = {
+      // Passkeys (Normalized versions are stripped of all spaces and in lowercase)
+      passkeys: {
+        entrance: "hello there obiwan",
+        cultivator: ["flowers"],
+        submariner: ["award", "recognition", "letterofrecognition", "letterofappreciation"],
+        writer: ["truth", "honesty", "vulnerability", "trust"]
+      },
+
+      // Lockout Config
+      maxAttempts: 5,
+      lockoutDurationMs: 15 * 60 * 1000 // 15 minutes in milliseconds
+    };
+
+    // Game state initialized from localStorage
+    let state = {
+      stage: 'landing', // 'landing', 'forge', 'sanctuary'
+      entranceSolved: false,
+      solvedVaults: {
+        cultivator: false,
+        submariner: false,
+        writer: false
+      },
+      attempts: {
+        entrance: 0,
+        cultivator: 0,
+        submariner: 0,
+        writer: 0
+      },
+      lockouts: {
+        entrance: null,
+        cultivator: null,
+        submariner: null,
+        writer: null
+      }
+    };
+
+    // Load State from localStorage on init
+    function loadState() {
+      const savedState = localStorage.getItem('forge_quest_state');
+      if (savedState) {
+        try {
+          const parsed = JSON.parse(savedState);
+          // Keep structure consistent in case of older formats
+          state = { ...state, ...parsed };
+        } catch (e) {
+          console.error("Error parsing saved state", e);
+        }
+      }
+    }
+
+    // Save State to localStorage
+    function saveState() {
+      localStorage.setItem('forge_quest_state', JSON.stringify(state));
+    }
+
+    // Inputs and buttons caching
+    const entranceInput = document.getElementById('entrance-input');
+    const entranceSubmit = document.getElementById('entrance-submit');
+    const lockoutEntrance = document.getElementById('lockout-entrance');
+
+    const modalOverlay = document.getElementById('vault-modal');
+    const modalInput = document.getElementById('modal-input');
+    const modalSubmit = document.getElementById('modal-submit');
+    const lockoutModal = document.getElementById('lockout-modal');
+
+    let currentModalVault = null;
+
+    // Normalize text utility
+    function normalize(text) {
+      return text.toLowerCase().replace(/\s+/g, '');
+    }
+
+    // Audio synthesizer for ambient forge/fireplace crackling sound
+    let audioCtx = null;
+    let rumbler = null;
+    let crackleInterval = null;
+    let isAudioPlaying = false;
+
+    const ambientAudioBtn = document.getElementById('ambient-audio-btn');
+
+    function toggleAmbientAudio() {
+      if (isAudioPlaying) {
+        stopAmbientAudio();
+      } else {
+        startAmbientAudio();
+      }
+    }
+
+    function startAmbientAudio() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        // 1. Procedural Low-Frequency Rumble (Warm hearth background)
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          // Apply lowpass/brownian-style filtering for deep rumble
+          output[i] = (lastOut + (0.015 * white)) / 1.015;
+          lastOut = output[i];
+          output[i] *= 4.0;
+        }
+
+        rumbler = audioCtx.createBufferSource();
+        rumbler.buffer = noiseBuffer;
+        rumbler.loop = true;
+
+        const lowpass = audioCtx.createBiquadFilter();
+        lowpass.type = 'lowpass';
+        lowpass.frequency.setValueAtTime(140, audioCtx.currentTime);
+
+        const rumblerGain = audioCtx.createGain();
+        rumblerGain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+
+        rumbler.connect(lowpass);
+        lowpass.connect(rumblerGain);
+        rumblerGain.connect(audioCtx.destination);
+        rumbler.start();
+
+        // 2. Procedural Fire Crackles / Pops
+        crackleInterval = setInterval(() => {
+          if (!audioCtx || audioCtx.state === 'suspended') return;
+
+          if (Math.random() > 0.45) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            // Pop pitch sweep
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(900 + Math.random() * 1200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.012);
+
+            gain.gain.setValueAtTime(0.04 + Math.random() * 0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.012);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.015);
+          }
+        }, 85);
+
+        isAudioPlaying = true;
+        ambientAudioBtn.classList.add('active');
+        ambientAudioBtn.innerHTML = `
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+          Hearth Sounds: On
+        `;
+      } catch (e) {
+        console.error("Audio Context failed to start", e);
+      }
+    }
+
+    function stopAmbientAudio() {
+      if (rumbler) {
+        try { rumbler.stop(); } catch (e) { }
+        rumbler = null;
+      }
+      if (crackleInterval) {
+        clearInterval(crackleInterval);
+        crackleInterval = null;
+      }
+      isAudioPlaying = false;
+      ambientAudioBtn.classList.remove('active');
+      ambientAudioBtn.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        Hearth Sounds: Off
+      `;
+    }
+
+    ambientAudioBtn.addEventListener('click', toggleAmbientAudio);
+
+    // Dynamic fire embers visual generation
+    const embersBg = document.getElementById('embers-bg');
+    function createEmber() {
+      const ember = document.createElement('div');
+      ember.classList.add('ember-particle');
+
+      const size = Math.random() * 12 + 4;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 4 + 4;
+      const delay = Math.random() * 2;
+
+      ember.style.width = `${size}px`;
+      ember.style.height = `${size}px`;
+      ember.style.left = `${left}%`;
+      ember.style.animationDuration = `${duration}s`;
+      ember.style.animationDelay = `${delay}s`;
+
+      embersBg.appendChild(ember);
+
+      setTimeout(() => {
+        ember.remove();
+      }, (duration + delay) * 1000);
+    }
+
+    // Periodically spawn embers
+    setInterval(createEmber, 350);
+
+    // Initial load configurations & local storage check
+    function init() {
+      loadState();
+
+      // Set active layouts depending on stage
+      if (state.stage === 'landing' && !state.entranceSolved) {
+        document.getElementById('landing-page').style.display = 'flex';
+        document.getElementById('forge-floor').style.display = 'none';
+        document.getElementById('reading-sanctuary').style.display = 'none';
+      } else if (state.stage === 'forge') {
+        document.getElementById('landing-page').classList.add('doors-opened');
+        setTimeout(() => {
+          document.getElementById('landing-page').style.display = 'none';
+        }, 600);
+        document.getElementById('forge-floor').style.display = 'flex';
+        document.getElementById('reading-sanctuary').style.display = 'none';
+        syncForgeFloorUI();
+      } else if (state.stage === 'sanctuary') {
+        document.getElementById('landing-page').style.display = 'none';
+        document.getElementById('forge-floor').style.display = 'none';
+        const sanctuary = document.getElementById('reading-sanctuary');
+        sanctuary.style.display = 'grid';
+        sanctuary.classList.add('active');
+      }
+
+      // Check current lockout timers
+      updateLockouts();
+    }
+
+    // Helper to calculate remaining lockout times
+    function getRemainingLockoutTime(key) {
+      if (!state.lockouts[key]) return 0;
+      const now = Date.now();
+      const expires = state.lockouts[key];
+      const diff = expires - now;
+      return diff > 0 ? diff : 0;
+    }
+
+    // Check lockouts and disable inputs as needed
+    function updateLockouts() {
+      let activeTimers = false;
+
+      // 1. Entrance lockout
+      const entranceRemaining = getRemainingLockoutTime('entrance');
+      if (entranceRemaining > 0) {
+        activeTimers = true;
+        entranceInput.disabled = true;
+        entranceSubmit.disabled = true;
+
+        const minutes = Math.floor(entranceRemaining / 60000);
+        const seconds = Math.floor((entranceRemaining % 60000) / 1000);
+        lockoutEntrance.innerText = `The furnace is overheated. Let the tools cool down... ${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+        lockoutEntrance.classList.add('active');
+      } else {
+        if (state.lockouts.entrance) {
+          state.lockouts.entrance = null;
+          state.attempts.entrance = 0;
+          saveState();
+        }
+        entranceInput.disabled = false;
+        entranceSubmit.disabled = false;
+        lockoutEntrance.classList.remove('active');
+      }
+
+      // 2. Active modal vault lockout
+      if (currentModalVault) {
+        const vaultRemaining = getRemainingLockoutTime(currentModalVault);
+        if (vaultRemaining > 0) {
+          activeTimers = true;
+          modalInput.disabled = true;
+          modalSubmit.disabled = true;
+
+          const minutes = Math.floor(vaultRemaining / 60000);
+          const seconds = Math.floor((vaultRemaining % 60000) / 1000);
+          lockoutModal.innerText = `The vault is locked. Give the mechanism time to cool... ${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+          lockoutModal.classList.add('active');
+        } else {
+          if (state.lockouts[currentModalVault]) {
+            state.lockouts[currentModalVault] = null;
+            state.attempts[currentModalVault] = 0;
+            saveState();
+          }
+          modalInput.disabled = false;
+          modalSubmit.disabled = false;
+          lockoutModal.classList.remove('active');
+        }
+      }
+
+      if (activeTimers) {
+        requestAnimationFrame(() => {
+          setTimeout(updateLockouts, 1000);
+        });
+      }
+    }
+
+    // Trigger incorrect input shake effect
+    function triggerShake(inputElement) {
+      inputElement.classList.add('shake');
+      setTimeout(() => {
+        inputElement.classList.remove('shake');
+      }, 400);
+    }
+
+    // Handle Stage 1 submission
+    entranceSubmit.addEventListener('click', () => {
+      if (getRemainingLockoutTime('entrance') > 0) return;
+
+      const userVal = normalize(entranceInput.value);
+      const targetVal = normalize(CONFIG.passkeys.entrance);
+
+      if (userVal === targetVal) {
+        // Success: transition
+        state.entranceSolved = true;
+        state.attempts.entrance = 0;
+        state.stage = 'forge';
+        saveState();
+
+        // Play heavy door split opening animations
+        document.getElementById('landing-page').classList.add('doors-opened');
+
+        setTimeout(() => {
+          document.getElementById('landing-page').style.display = 'none';
+          document.getElementById('forge-floor').style.display = 'flex';
+          syncForgeFloorUI();
+        }, 700);
+
+      } else {
+        // Failed
+        triggerShake(entranceInput);
+        state.attempts.entrance = (state.attempts.entrance || 0) + 1;
+
+        if (state.attempts.entrance >= CONFIG.maxAttempts) {
+          state.lockouts.entrance = Date.now() + CONFIG.lockoutDurationMs;
+          saveState();
+          updateLockouts();
+        } else {
+          // Normal error visual indicators
+          entranceInput.value = '';
+          entranceInput.placeholder = `Incorrect. (${CONFIG.maxAttempts - state.attempts.entrance} attempts remain)`;
+        }
+      }
+    });
+
+    // Handle enter key press on inputs
+    entranceInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') entranceSubmit.click();
+    });
+
+    modalInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') modalSubmit.click();
+    });
+
+
+    // STAGE 2 VAULTS LOGIC
+    const vaultData = {
+      cultivator: {
+        title: "The Cultivator's Chest",
+        desc: "A rustic wood chest wrapped in subtle, glowing iron leaf accents.",
+        poem: `A quiet devotion carved in the dirt,
+          Tending the soil, keeping frost from the hurt.
+          You shape the wild earth with a patient hand,
+          Building a sanctuary out of the land.
+
+          You watch over the berries, the beds, and the green,
+          Cultivating wonders that happen unseen.
+          From the dirt on your hands to the life that ascends,
+          You look for the beauty you capture and send.
+
+          Awake in the sun, or unfurled in the night:
+          What brings your lens focus to capture the light?`,
+        svg: `<svg viewBox="0 0 140 100" class="vault-svg">
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#5c3a21" stroke="#332012" stroke-width="3"/>
+            <path d="M20 50 L120 50" stroke="#332012" stroke-width="4"/>
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#d9a05b" stroke="#7a5423" stroke-width="2"/>
+            <path d="M22 32 C35 32 30 48 22 48" fill="none" stroke="#2e382e" stroke-width="2.5"/>
+            <path d="M118 32 C105 32 110 48 118 48" fill="none" stroke="#2e382e" stroke-width="2.5"/>
+          </svg>`
+      },
+      submariner: {
+        title: "The Submariner's Vault",
+        desc: "A heavy, riveted antique brass box with a metallic sheen, featuring a stylized pressure valve.",
+        poem: `A brilliant mind wrapped in a humble grace,
+          Calibrating steel within a hidden space.
+          No need for praise, no shouting from the crest,
+          Just quiet focus put to every test.
+
+          You braved the shadows where the sun ends,
+          True to the path where absolute dark begins.
+          A master of the craft beneath the rolling tide,
+          With heavy pressure resting right outside.
+
+          A captain's written word of appreciation stays:
+          What honor names the excellence these lines praise?`,
+        svg: `<svg viewBox="0 0 140 100" class="vault-svg">
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#a67c3b" stroke="#5c431d" stroke-width="3"/>
+            <path d="M20 50 L120 50" stroke="#5c431d" stroke-width="4"/>
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#c0c0c0" stroke="#808080" stroke-width="2"/>
+            <g transform="translate(45, 65) scale(0.6)">
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#c0c0c0" stroke-width="4"/>
+              <line x1="-16" y1="0" x2="16" y2="0" stroke="#c0c0c0" stroke-width="3"/>
+              <line x1="0" y1="-16" x2="0" y2="16" stroke="#c0c0c0" stroke-width="3"/>
+            </g>
+          </svg>`
+      },
+      writer: {
+        title: "The Writer's Vault",
+        desc: "A dark, heavy iron scrollwork chest shaped like an antique manuscript lockbox.",
+        poem: `A quiet pen can hold a heavy weight,
+          Guarding the stories kept behind the gate.
+          A hesitant hand, a cautious, careful phrase,
+          Keeping the deepest thoughts inside the maze.
+
+          But ink grows bold when shadows start to fade,
+          Stepping beyond the filters nerves had made.
+          One quiet night, the armor tumbled down,
+          A beautiful courage, raw and newly found.
+
+          When walls collapse and true connection speaks:
+          What is the priceless gem the listener seeks?`,
+        svg: `<svg viewBox="0 0 140 100" class="vault-svg">
+            <rect x="20" y="30" width="100" height="60" rx="4" fill="#2d2929" stroke="#171515" stroke-width="3"/>
+            <path d="M20 50 L120 50" stroke="#171515" stroke-width="4"/>
+            <rect x="62" y="44" width="16" height="12" rx="2" fill="#a67c3b" stroke="#5c431d" stroke-width="2"/>
+            <path d="M30 40 Q40 33 50 40 T70 40" fill="none" stroke="#e5a93b" stroke-width="1.5" opacity="0.4"/>
+            <path d="M110 40 Q100 33 90 40 T70 40" fill="none" stroke="#e5a93b" stroke-width="1.5" opacity="0.4"/>
+          </svg>`
+      }
+    };
+
+    function openVaultModal(vaultKey) {
+      if (state.solvedVaults[vaultKey]) return; // Already solved
+
+      currentModalVault = vaultKey;
+      const data = vaultData[vaultKey];
+
+      document.getElementById('modal-title').innerText = data.title;
+      document.getElementById('modal-desc').innerText = data.desc;
+      document.getElementById('modal-poem').innerHTML = data.poem.replace(/\n/g, '<br>');
+      document.getElementById('modal-chest-visual').innerHTML = data.svg;
+
+      modalInput.value = '';
+      modalInput.placeholder = "Forge the answer...";
+
+      modalOverlay.style.display = 'flex';
+      requestAnimationFrame(() => {
+        modalOverlay.classList.add('active');
+      });
+
+      updateLockouts();
+    }
+
+    function closeVaultModal() {
+      modalOverlay.classList.remove('active');
+      setTimeout(() => {
+        modalOverlay.style.display = 'none';
+        currentModalVault = null;
+      }, 400);
+    }
+
+    function triggerLightBurst() {
+      const modalVisual = document.getElementById('modal-chest-visual');
+      if (modalVisual) {
+        const burst = document.createElement('div');
+        burst.className = 'gold-burst-effect';
+        modalVisual.appendChild(burst);
+        setTimeout(() => burst.remove(), 1200);
+      }
+      const floorBtn = document.getElementById(`vault-${currentModalVault}-btn`);
+      if (floorBtn) {
+        const burst = document.createElement('div');
+        burst.className = 'gold-burst-effect';
+        floorBtn.appendChild(burst);
+        setTimeout(() => burst.remove(), 1200);
+      }
+    }
+
+    // Handle Vault solutions submission
+    modalSubmit.addEventListener('click', () => {
+      if (!currentModalVault) return;
+      if (getRemainingLockoutTime(currentModalVault) > 0) return;
+
+      const userVal = normalize(modalInput.value);
+      const targets = CONFIG.passkeys[currentModalVault];
+
+      // Targets can be single value or arrays
+      let isCorrect = false;
+      if (Array.isArray(targets)) {
+        isCorrect = targets.map(t => normalize(t)).includes(userVal);
+      } else {
+        isCorrect = (userVal === normalize(targets));
+      }
+
+      if (isCorrect) {
+        // Unlocked successfully
+        state.solvedVaults[currentModalVault] = true;
+        state.attempts[currentModalVault] = 0;
+        saveState();
+
+        // Trigger Success animations inside modal
+        modalInput.value = "UNLOCKED";
+        modalInput.style.color = "var(--accent-amber)";
+        modalInput.disabled = true;
+        modalSubmit.disabled = true;
+
+        // Trigger golden light burst animation
+        triggerLightBurst();
+
+        setTimeout(() => {
+          closeVaultModal();
+          syncForgeFloorUI();
+        }, 1200);
+
+      } else {
+        // Incorrect
+        triggerShake(modalInput);
+        state.attempts[currentModalVault] = (state.attempts[currentModalVault] || 0) + 1;
+
+        if (state.attempts[currentModalVault] >= CONFIG.maxAttempts) {
+          state.lockouts[currentModalVault] = Date.now() + CONFIG.lockoutDurationMs;
+          saveState();
+          updateLockouts();
+        } else {
+          modalInput.value = '';
+          modalInput.placeholder = `Incorrect. (${CONFIG.maxAttempts - state.attempts[currentModalVault]} attempts left)`;
+        }
+      }
+    });
+
+    // Synchronize UI styles for resolved chests & indicators
+    function syncForgeFloorUI() {
+      // 1. Vault containers open state classes
+      Object.keys(state.solvedVaults).forEach(key => {
+        const solved = state.solvedVaults[key];
+        const container = document.getElementById(`vault-${key}-btn`);
+        const lockIndicator = document.getElementById(`lock-${key}`);
+
+        if (solved) {
+          container.classList.add('unlocked');
+          lockIndicator.classList.add('unlocked');
+
+          // Modify chest SVG inside panel to open visual
+          const svgObj = container.querySelector('.vault-svg');
+          if (svgObj) {
+            // Apply gold drop shadow glow
+            svgObj.style.filter = "drop-shadow(0 0 15px rgba(229, 169, 59, 0.6))";
+          }
+        }
+      });
+
+      // 2. Active workspace check
+      const solvedCount = Object.values(state.solvedVaults).filter(Boolean).length;
+      const wsTitle = document.getElementById('workspace-title');
+      const wsDesc = document.getElementById('workspace-desc');
+      const portalArea = document.getElementById('final-trigger-area');
+
+      if (solvedCount === 0) {
+        wsTitle.innerText = "Artisan Workbench";
+        wsDesc.innerText = "Click on a memory vault on the artisan table to forge its answer. Unlock all three to activate the inner archive.";
+        portalArea.style.display = "none";
+      } else if (solvedCount < 3) {
+        wsTitle.innerText = `Workbench: ${solvedCount} of 3 Vaults Unlocked`;
+        wsDesc.innerText = "You feel the heat rising as mechanisms release. Forge solutions for the remaining vaults to activate the final door.";
+        portalArea.style.display = "none";
+      } else {
+        // All unlocked: activate stage 3 portal door trigger
+        wsTitle.innerText = "The Forge is Complete";
+        wsDesc.innerText = "All three memory vaults are unlocked and aligned. The heavy iron door in the back is vibrating with intense heat.";
+        portalArea.style.display = "block";
+      }
+    }
+
+    // Transition into Stage 3 Finale Reading Mode
+    function enterSanctuary() {
+      state.stage = 'sanctuary';
+      saveState();
+
+      // Transition animation
+      document.getElementById('forge-floor').style.opacity = 0;
+      document.getElementById('forge-floor').style.transition = 'opacity 0.8s ease';
+
+      setTimeout(() => {
+        document.getElementById('forge-floor').style.display = 'none';
+
+        const sanctuary = document.getElementById('reading-sanctuary');
+        sanctuary.style.display = 'grid';
+        requestAnimationFrame(() => {
+          sanctuary.classList.add('active');
+        });
+      }, 800);
+    }
+
+    // Initialize the app on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
