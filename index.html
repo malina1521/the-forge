@@ -1414,6 +1414,40 @@
       text-shadow: 0 0 8px rgba(245, 196, 105, 0.15);
     }
 
+    /* Lock Gate Button Styling */
+    .lock-gate-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(40, 32, 30, 0.85);
+      border: 1px solid var(--accent-terracotta);
+      color: var(--accent-terracotta);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px var(--accent-terracotta-glow);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      z-index: 210;
+    }
+
+    .lock-gate-btn:hover {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+      transform: scale(1.05);
+    }
+
+    .lock-gate-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
     /* RESPONSIVE DESIGN */
     @media (max-width: 900px) {
       .artisan-table {
@@ -1504,6 +1538,11 @@
 
   <!-- STAGE 2: THE MAIN FORGE FLOOR -->
   <div id="forge-floor" class="screen">
+    <button class="lock-gate-btn" onclick="lockGate()" title="Lock Gate">
+      <svg viewBox="0 0 24 24">
+        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+      </svg>
+    </button>
     <div class="dashboard-container">
 
       <!-- Top Zone: Grand Forge Doors Lock Status -->
@@ -1686,6 +1725,11 @@
 
   <!-- STAGE 3: THE FINALE (READING SANCTUARY) -->
   <div id="reading-sanctuary" class="screen">
+    <button class="lock-gate-btn" onclick="lockGate()" title="Lock Gate">
+      <svg viewBox="0 0 24 24">
+        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+      </svg>
+    </button>
     <!-- Sidebar Panel containing details and Spotify Player -->
     <div class="sanctuary-sidebar">
       <div class="sanctuary-title">The Archive of the Forge</div>
@@ -2596,6 +2640,97 @@
               world is at peace, and our stories are safe.
             </div>
           </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Mel's Version</span>
+              <span class="piece-author">Author: M</span>
+            </div>
+            <div class="piece-content">
+              You open the door as we walk into Josie’s Bistro a few minutes before six. You take my hand as we approach the maître d’ podium near the entrance.
+              I speak up before you can. “Reservation under Picard.” From the corner of my eye, I watch you perk up, surprised with a cheeky grin, your eyes expressive of such beautiful love. You're beaming as if I've made a grand gesture. I love how you get excited about the little things.
+              <br><br>
+              I bite back a chuckle as I think to myself, <em>If only you knew.</em> I am happy you're already happy, but also full of nervous excitement because the real gesture is yet to come.
+              <br><br>
+              I stare out at the dining room, recognizing the same white table settings that contrast perfectly with the dark furniture and decor. The spotlights around the room make my eyes immediately travel to the walls. The gallery dining room is what Josie’s is known for across the state.
+              <br><br>
+              The gentleman at the podium scans the list, then he looks up with a knowing smile. “It will be just a few minutes.”
+              <br><br>
+              You nod, and we step aside in the lobby. I'm doing my best not to fidget while we wait for our table, but the excitement is getting the best of me. I know you've caught on.
+              <br><br>
+              You tuck a loose curl behind my ear as you watch me with keen suspicion. “Are you going to tell me what's going on yet?”
+              <br><br>
+              “Absolutely not.” Those piercing eyes tend to melt my heart and break my will on just about anything, but not today.
+              <br><br>
+              “Why not, my love?”
+              <br><br>
+              “Because.”
+              <br><br>
+              “You can barely contain yourself. Just tell me, the suspense is killing me.”
+              <br><br>
+              “I know. It's okay, you'll appreciate waiting.” I smile, knowing I'm poking the bear as I take your hand in mine.
+              <br><br>
+              You pull me close, wrapping your arms around me. I get goosebumps when you whisper in my ear, “For the record, I do NOT appreciate waiting. You'll pay for this later.”
+              <br><br>
+              “I know.” I laugh a bit. I'm counting on your counter love. It's how we are, what we do. My body is humming with the electric energy between us. You slide a hand down onto my hip, knowing just the spot to linger on. You're not playing fair, though you never do.
+              <br><br>
+              You're really good at getting information out of me, so I have been very focused on giving you as little as possible for the last week. I'm sure you'll be creative in getting me back for this one, but I know it will be worth it.
+              <br><br>
+              “Picard, party of two?”
+              <br><br>
+              We follow the gentleman in the dark grey suit as he leads us down the main walkway through the center of the restaurant toward a booth in the corner. This is the booth where we sat on our first anniversary date. It's been a few years, but the restaurant hasn't changed much. The dim lighting bounces off the angular glass shades, casting unique shapes and shadows for a beautiful romantic glow. The gallery theme is the streets of Paris at night, and the photos in each wing feature a different photographer.
+              <br><br>
+              When we approach our booth, you freeze. You're looking at the framed photographs on the wall above the table, but my eyes are trained on you. The smile, the shock, it's everything I wanted. Better than I'd hoped for.
+              <br><br>
+              “That's…”
+              <br><br>
+              “Mhmm. Let's sit.” I gesture you to the booth, and you slide in. You're still in shock as I scoot in next to you. We sit close, hip to hip, just like we did during that anniversary dinner. We've always preferred to be close.
+              <br><br>
+              “My photos. How? Why?”
+              <br><br>
+              “Because they deserve to be seen.” I knew the questions were coming. I see the wheels spinning in your head. I turn just as a server walks up to the table.
+              <br><br>
+              “Hi! My name is Levi. I'll be taking care of you tonight. Would you like to hear about our specials?”
+              <br><br>
+              “Sure,” you manage to say.
+              <br><br>
+              “We have two incredible specials for you tonight,” Levi begins. “First is our chef's special: a filet mignon smothered in a thyme and mushroom gravy, served with seasonal roasted vegetables and your choice of roast potatoes or a housemade dinner roll. Our other special comes from our reserve menu. Chef David perfected this recipe while studying in Paris about twenty years ago. The Fettuccine Davide is a refreshing take on the classic dish and one of my personal favorites. It features hand-cut fettuccine tossed in a velvety Calabrian tomato cream sauce, topped with fire-roasted Mediterranean chicken, and finished with grated Parmesan and fresh cracked pepper. For the perfect red wine pairing, our house Sommelier recommends the 2016 Graves Bordeaux from Château de Callac. For a white, the Cave De Lugny La Cote Blanche Macon Villages Chardonnay from 2018.”
+              <br><br>
+              “Thank you, Levi,” I say, turning back to you, then back to address Levi. “Hey, what do you think of the photos in this booth? Be honest.”
+              <br><br>
+              My hand on your knee hits the bottom of the table as you visibly shift your weight, making a loud thud. I chuckle as you glare at me. I slowly slide my hand up your leg as we both look at Levi.
+              <br><br>
+              “I really like these, actually,” Levi says, looking up at the wall. “You see a lot of the same shots cycle through here; these are different. They’re… Paris from the eyes of someone who sees the city as a living watercolor, not just a postcard.”
+              <br><br>
+              By the time Levi has finished speaking, my hand is already grazing your cock through your pants with a feather-light touch. Just enough to let you know I am there.
+              <br><br>
+              I couldn't have said it better myself. “And there you have it; that’s why.” I can’t contain the smile any longer. I feel your reaction to my touch; it makes me giddy to think about the ways we’re going to play tonight after building all this tension.
+              <br><br>
+              “I will give you a few minutes with the menu,” Levi excuses himself, probably sensing the shift in the air. Oops.
+              <br><br>
+              You lean over to kiss my cheek and speak quietly in my ear, “I can’t believe you did that, but thank you for this. All of it. But also, I may have to spank your ass red for that one.”
+              <br><br>
+              Unconsciously, I instantly squeeze my legs together. <em>Fuck.</em>
+              <br><br>
+              You’re quick, already having a hand on my knee, you nudge me to relax; your hand is now exploring my inner thigh under the table. Turnabout is fair play and all. As your hand moves closer to my center, you discover another surprise. I know the moment you realize. The way your eyes change color, how your pupils dilate with arousal, is unmistakable.
+              <br><br>
+              “You’re welcome, my love.” I chuckle. “So the specials sound good, what do you think?” I do my best to keep my attention on the menu as your fingers slip between my folds under the table.
+              <br><br>
+              You laugh, but don't let up. Your fingers move slowly, precisely alternating, slipping into my heat and then expertly circling my clit without missing a beat. “Which one?”
+              <br><br>
+              “Both actually. I also like the sound of the wine pairings.”
+              <br><br>
+              “What about dessert?”
+              <br><br>
+              “There’s only one dessert on the menu tonight, Darling.”
+              <br><br>
+              “I’m not complaining.”
+              <br><br>
+              “I didn’t figure you would.”
+              <br><br>
+              We both laugh. I can tell that while this is vulnerable, it’s also incredibly healing for you. I love that your perspective can be shared so beautifully in such an amazing place, somewhere so deeply meaningful to us. I am so glad I decided to take the leap of faith and submit the photos to the gallery director last year. I was in absolute disbelief when I got that call, and the work it took to hide this from you for the last month was brutal. But the look on your face right now, the way you’re glowing, makes every bit of my effort worth it. I’d do it again in a heartbeat.
+            </div>
+          </div>
         </div>
 
       </div>
@@ -2618,7 +2753,7 @@
       lockoutDurationMs: 15 * 60 * 1000 // 15 minutes in milliseconds
     };
 
-    // Game state initialized from localStorage
+    // Game state initialized as temporary variables
     let state = {
       stage: 'landing', // 'landing', 'forge', 'sanctuary'
       entranceSolved: false,
@@ -2641,23 +2776,14 @@
       }
     };
 
-    // Load State from localStorage on init
+    // Load State (disabled/unused)
     function loadState() {
-      const savedState = localStorage.getItem('forge_quest_state');
-      if (savedState) {
-        try {
-          const parsed = JSON.parse(savedState);
-          // Keep structure consistent in case of older formats
-          state = { ...state, ...parsed };
-        } catch (e) {
-          console.error("Error parsing saved state", e);
-        }
-      }
+      // Do nothing
     }
 
-    // Save State to localStorage
+    // Save State (disabled/unused)
     function saveState() {
-      localStorage.setItem('forge_quest_state', JSON.stringify(state));
+      // Do nothing
     }
 
     // Inputs and buttons caching
@@ -3163,6 +3289,13 @@
             // Apply gold drop shadow glow
             svgObj.style.filter = "drop-shadow(0 0 15px rgba(229, 169, 59, 0.6))";
           }
+        } else {
+          container.classList.remove('unlocked');
+          lockIndicator.classList.remove('unlocked');
+          const svgObj = container.querySelector('.vault-svg');
+          if (svgObj) {
+            svgObj.style.filter = "";
+          }
         }
       });
 
@@ -3186,6 +3319,61 @@
         wsDesc.innerText = "All three memory vaults are unlocked and aligned. The heavy iron door in the back is vibrating with intense heat.";
         portalArea.style.display = "block";
       }
+    }
+
+    function lockGate() {
+      // 1. Reset all state variables
+      state.stage = 'landing';
+      state.entranceSolved = false;
+      state.solvedVaults = {
+        cultivator: false,
+        submariner: false,
+        writer: false
+      };
+      state.attempts = {
+        entrance: 0,
+        cultivator: 0,
+        submariner: 0,
+        writer: 0
+      };
+      state.lockouts = {
+        entrance: null,
+        cultivator: null,
+        submariner: null,
+        writer: null
+      };
+
+      // 2. Clear inputs and close modal
+      entranceInput.value = '';
+      entranceInput.placeholder = "Call out the name...";
+      modalInput.value = '';
+      modalInput.placeholder = "Forge the answer...";
+      closeVaultModal();
+
+      // 3. Clear incorrect lockouts display
+      lockoutEntrance.classList.remove('active');
+      lockoutEntrance.innerText = '';
+      lockoutModal.classList.remove('active');
+      lockoutModal.innerText = '';
+
+      // Enable inputs
+      entranceInput.disabled = false;
+      entranceSubmit.disabled = false;
+      modalInput.disabled = false;
+      modalSubmit.disabled = false;
+
+      // 4. Sync UI components
+      syncForgeFloorUI();
+
+      // 5. Instantly transition screens
+      document.getElementById('landing-page').classList.remove('doors-opened');
+      document.getElementById('landing-page').style.display = 'flex';
+      document.getElementById('forge-floor').style.display = 'none';
+      document.getElementById('forge-floor').style.opacity = '';
+      
+      const sanctuary = document.getElementById('reading-sanctuary');
+      sanctuary.style.display = 'none';
+      sanctuary.classList.remove('active');
     }
 
     // Transition into Stage 3 Finale Reading Mode
