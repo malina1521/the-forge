@@ -131,53 +131,7 @@
       }
     }
 
-    /* Cozy Sound Controls (Top-Right) */
-    .sound-control-panel {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 12px;
-      z-index: 100;
-    }
 
-    .ambient-btn {
-      background: rgba(40, 32, 30, 0.85);
-      border: 1px solid var(--border-wood);
-      color: var(--text-light);
-      padding: 10px 16px;
-      border-radius: 30px;
-      font-family: var(--font-sans);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      min-height: 48px;
-    }
-
-    .ambient-btn:hover {
-      border-color: var(--accent-amber);
-      color: var(--accent-amber);
-      box-shadow: 0 0 10px var(--accent-amber-glow);
-    }
-
-    .ambient-btn.active {
-      background: var(--accent-terracotta);
-      border-color: var(--accent-amber);
-      color: var(--text-light);
-    }
-
-    .ambient-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
 
     /* Screen Transitions */
     .screen {
@@ -210,9 +164,12 @@
       top: 0;
       width: 50%;
       height: 100%;
-      background: radial-gradient(circle at center, #231c1a 0%, #0d0a09 100%);
-      border: 6px solid #1a1413;
-      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+      background:
+        linear-gradient(to right, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.45)),
+        repeating-linear-gradient(90deg, #161211 0px, #161211 30px, #191413 30px, #191413 60px, #120e0d 60px, #120e0d 90px),
+        radial-gradient(circle at center, #2e2422 0%, #0d0a09 100%);
+      border: 10px solid #231b19;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
       z-index: 10;
       transition: transform var(--transition-speed) cubic-bezier(0.7, 0, 0.3, 1);
       display: flex;
@@ -224,14 +181,27 @@
 
     .door-left {
       left: 0;
-      border-right: 3px solid var(--border-wood);
+      border-right: 6px solid #110d0c;
       transform-origin: left center;
     }
 
     .door-right {
       right: 0;
-      border-left: 3px solid var(--border-wood);
+      border-left: 6px solid #110d0c;
       transform-origin: right center;
+    }
+
+    /* Rivets on the door frames */
+    .door-panel::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 2px dashed rgba(229, 169, 59, 0.12);
+      border-radius: 4px;
+      pointer-events: none;
     }
 
     /* Door Ornaments */
@@ -239,11 +209,24 @@
       position: absolute;
       left: 0;
       right: 0;
-      height: 20px;
-      background: linear-gradient(to bottom, #38302d, #1f1b1a);
-      border-top: 2px solid #5a4f4b;
-      border-bottom: 2px solid #100d0c;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      height: 24px;
+      background: linear-gradient(to bottom, #38302d 0%, #1c1817 50%, #0c0a0a 100%);
+      border-top: 2px solid #524744;
+      border-bottom: 2px solid #0d0a09;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.05);
+    }
+
+    .door-band::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      transform: translateY(-50%);
+      background-image: radial-gradient(circle at center, #6e5c58 2px, transparent 3px);
+      background-size: 35px 100%;
+      opacity: 0.75;
     }
 
     .door-band-top {
@@ -252,31 +235,6 @@
 
     .door-band-bottom {
       bottom: 15%;
-    }
-
-    .door-handle-ring {
-      width: 80px;
-      height: 80px;
-      border: 8px solid var(--accent-iron);
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-      background: transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .door-left .door-handle-ring {
-      right: 20px;
-      border-right-color: var(--accent-brass);
-    }
-
-    .door-right .door-handle-ring {
-      left: 20px;
-      border-left-color: var(--accent-brass);
     }
 
     /* Split Animation Active Class */
@@ -288,54 +246,245 @@
       transform: translateX(100%);
     }
 
-    /* Scroll Interface on Outer Door */
-    /* Scroll Interface on Outer Door - Cinematic Dark Theme */
-    .scroll-container {
-      background-color: rgba(25, 20, 19, 0.82);
-      background-image: radial-gradient(rgba(229, 169, 59, 0.04) 1px, transparent 0);
-      background-size: 24px 24px;
-      border: 1px solid rgba(229, 169, 59, 0.25);
-      border-radius: 8px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: clamp(1.5rem, 5vw, 2.5rem);
-      width: 95%;
-      max-width: 650px;
-      color: #ece6dc;
-      text-align: center;
-      position: relative;
+    /* Cryptographic Rune Lock Centered Interface */
+    .rune-lock-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 15;
-      transition: opacity 0.5s ease;
-      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      width: 95%;
+      max-width: 540px;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.6s cubic-bezier(0.7, 0, 0.3, 1);
     }
 
-    .scroll-header {
-      font-family: var(--font-display);
-      color: var(--accent-amber);
-      font-size: 1.8rem;
-      margin-bottom: 25px;
-      letter-spacing: 2px;
-      border-bottom: 1px double var(--accent-amber);
-      padding-bottom: 10px;
-      text-shadow: 0 0 10px var(--accent-amber-glow);
+    /* Outer heavy circular iron bezel */
+    .rune-lock-outer {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #2a2220 0%, #171211 65%, #0b0909 100%);
+      border: 8px solid #3d312e;
+      border-radius: 50%;
+      box-shadow:
+        0 25px 65px rgba(0, 0, 0, 0.95),
+        inset 0 0 50px rgba(0, 0, 0, 0.85),
+        0 0 35px rgba(229, 90, 50, 0.15);
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .poem-layout {
-      margin-bottom: 35px;
-      font-style: italic;
-      white-space: pre-line;
-      font-size: clamp(1.05rem, 2.4vw, 1.25rem);
-      line-height: 2.0;
-      font-family: var(--font-serif);
-      color: #fce8d3;
-      letter-spacing: 0.12em;
+    /* Metallic double border on bezel */
+    .rune-lock-outer::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 3px double var(--accent-brass);
+      border-radius: 50%;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Rivets along the lock circular outer rim */
+    .rune-lock-outer::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      border: 1px dashed rgba(229, 169, 59, 0.25);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .rune-lock-inner {
+      width: 94%;
+      height: 94%;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #1a1413 25%, #0c0909 100%);
+      box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+    }
+
+    /* Concentric rotating mechanical dial rings */
+    .dial-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(217, 160, 91, 0.22);
+      background-color: transparent;
+      pointer-events: none;
+      transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Dial Ring 1 (Outer - slowest) */
+    .dial-ring-1 {
+      width: 88%;
+      height: 88%;
+      border-style: double;
+      border-width: 4px;
+      border-color: rgba(229, 169, 59, 0.2) transparent;
+      animation: dialRotateSlow 45s linear infinite;
+    }
+
+    /* Dial Ring 2 (Middle) */
+    .dial-ring-2 {
+      width: 74%;
+      height: 74%;
+      border-style: dashed;
+      border-width: 2px;
+      border-color: transparent rgba(192, 90, 70, 0.3) rgba(192, 90, 70, 0.3);
+      animation: dialRotateReverse 35s linear infinite;
+    }
+
+    /* Dial Ring 3 (Inner - fastest) */
+    .dial-ring-3 {
+      width: 60%;
+      height: 60%;
+      border-style: dotted;
+      border-width: 3px;
+      border-color: rgba(229, 169, 59, 0.35) rgba(229, 169, 59, 0.1) transparent;
+      animation: dialRotateFast 22s linear infinite;
+    }
+
+    /* Lock Core (Horizontal lock bar across center of dial) */
+    .lock-core {
+      position: absolute;
+      width: 92%;
+      background: linear-gradient(to bottom, #2b201e 0%, #1b1413 50%, #0f0b0a 100%);
+      border: 2px solid var(--accent-brass);
+      border-left: 5px solid var(--accent-brass);
+      border-right: 5px solid var(--accent-brass);
+      border-radius: 6px;
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.92),
+        inset 0 2px 4px rgba(255, 255, 255, 0.05),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.85),
+        0 0 20px rgba(229, 169, 59, 0.18);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(1rem, 4.5vw, 1.75rem) 16px;
+      z-index: 5;
       text-align: center;
+    }
+
+    /* Side rivets on the lock core plate */
+    .lock-core::before,
+    .lock-core::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 80%;
+      top: 10%;
+      background-image: radial-gradient(circle at center, #6e5c58 2px, transparent 3px);
+      background-size: 100% 25px;
+      opacity: 0.65;
+    }
+
+    .lock-core::before {
+      left: 4px;
+    }
+
+    .lock-core::after {
+      right: 4px;
+    }
+
+    /* Engraved Clue Text */
+    .engraved-clue {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      line-height: 1.55;
+      color: rgba(245, 196, 105, 0.9);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+      max-width: 420px;
       text-shadow:
-        0 0 10px rgba(245, 196, 105, 0.5),
-        0 0 22px rgba(229, 169, 59, 0.35),
-        0 0 45px rgba(229, 90, 50, 0.2);
-      transition: text-shadow 0.5s ease;
+        -1px -1px 1px #000,
+        1px 1px 1px rgba(255, 255, 255, 0.08),
+        0 0 10px rgba(229, 169, 59, 0.45);
+      padding: 0 10px;
+    }
+
+    /* Animation when gates open - fade out and scale lock */
+    .doors-opened .rune-lock-container {
+      transform: translate(-50%, -50%) scale(0.75);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Stage 1 Main Title */
+    .forge-title {
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 15;
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 15px var(--accent-amber-glow),
+        0 0 30px rgba(192, 90, 70, 0.3);
+      transition: all 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+
+    .doors-opened .forge-title {
+      opacity: 0;
+      transform: translate(-50%, -20px) scale(0.95);
+      pointer-events: none;
+    }
+
+    @keyframes dialRotateSlow {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes dialRotateReverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes dialRotateFast {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* Interactive Inputs */
@@ -1476,6 +1625,180 @@
         padding: 40px 5%;
       }
     }
+
+    /* Blueprint Side Drawer */
+    .blueprints-drawer {
+      position: fixed;
+      top: 0;
+      right: -460px;
+      /* Hidden by default */
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      background-color: #0b1a30;
+      background-image:
+        linear-gradient(rgba(0, 191, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 191, 255, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-left: 3px solid #00bfff;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+      z-index: 300;
+      transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      color: #e0f2f1;
+      font-family: var(--font-sans);
+    }
+
+    .blueprints-drawer.active {
+      right: 0;
+    }
+
+    .blueprints-header {
+      padding: 24px 20px;
+      border-bottom: 2px solid #00bfff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(11, 26, 48, 0.9);
+    }
+
+    .blueprints-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: 2px;
+      color: #00e5ff;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    }
+
+    .blueprints-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      color: #00bfff;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      line-height: 1;
+    }
+
+    .blueprints-close-btn:hover {
+      color: #ff5252;
+    }
+
+    .blueprints-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .blueprint-intro {
+      font-size: 0.75rem;
+      color: #80deea;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px dashed rgba(0, 191, 255, 0.3);
+      padding-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .blueprint-card {
+      background: rgba(0, 43, 73, 0.5);
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 4px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .blueprint-card-header {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #00e5ff;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .blueprint-meta {
+      font-size: 0.7rem;
+      color: #4dd0e1;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .blueprint-label {
+      font-size: 0.75rem;
+      color: #80deea;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .blueprint-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #b2dfdb;
+      white-space: pre-line;
+      margin-bottom: 15px;
+      padding-left: 10px;
+      border-left: 2px solid rgba(0, 191, 255, 0.25);
+    }
+
+    .blueprint-answer-box {
+      background-color: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      padding: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .blueprint-answer-label {
+      color: #4dd0e1;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .blueprint-answer-value {
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Style for the sidebar button */
+    .blueprint-toggle-btn {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--accent-brass);
+      color: var(--accent-brass);
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .blueprint-toggle-btn:hover {
+      background: var(--accent-brass);
+      color: var(--text-dark);
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+    }
   </style>
 </head>
 
@@ -1483,15 +1806,7 @@
 
   <div class="embers-overlay" id="embers-bg"></div>
 
-  <!-- Sound control panels -->
-  <div class="sound-control-panel">
-    <button class="ambient-btn" id="ambient-audio-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-      </svg>
-      Hearth Sounds: Off
-    </button>
-  </div>
+
 
   <!-- STAGE 1: THE LANDING PAGE -->
   <div id="landing-page" class="screen active">
@@ -1499,39 +1814,40 @@
     <div class="door-panel door-left" id="left-door">
       <div class="door-band door-band-top"></div>
       <div class="door-band door-band-bottom"></div>
-      <div class="door-handle-ring"></div>
     </div>
 
     <div class="door-panel door-right" id="right-door">
       <div class="door-band door-band-top"></div>
       <div class="door-band door-band-bottom"></div>
-      <div class="door-handle-ring"></div>
     </div>
 
-    <!-- Entrance Scroll Paper Overlay -->
-    <div class="scroll-container" id="landing-scroll">
-      <div class="scroll-header">The Entrance to the Forge</div>
-      <div class="poem-layout">
-        A spark struck in a crowded space,
-        Leaving the noise for a quieter pace.
-        We built a world from line to line,
-        Shifting the raw to something divine.
+    <!-- Main Title Header -->
+    <h1 class="forge-title">Two Wordsmiths Forge</h1>
 
-        From a certain point of view, you'll see,
-        The edge of the page holds the passkey.
-        Trace the margins where it all began,
-        Recall the greeting, find the plan.
+    <!-- Cryptographic Mechanical Rune Lock Centered Interface -->
+    <div class="rune-lock-container" id="landing-scroll">
+      <div class="rune-lock-outer">
+        <div class="rune-lock-inner">
+          <!-- Concentric rotating mechanical dial rings -->
+          <div class="dial-ring dial-ring-1"></div>
+          <div class="dial-ring dial-ring-2"></div>
+          <div class="dial-ring dial-ring-3"></div>
 
-        Call out the name from that distant shore:
-        The very first words at the hidden door.
-      </div>
+          <!-- Central lock bar containing input & clue -->
+          <div class="lock-core">
+            <div class="engraved-clue">
+              "The words found when the bad memories fade.<br>What am I to you?"
+            </div>
 
-      <div class="input-group">
-        <input type="text" id="entrance-input" class="workspace-input" placeholder="Call out the name..."
-          autocomplete="off">
-        <button id="entrance-submit" class="forge-btn">Unlock Gate</button>
-        <div class="lockout-info" id="lockout-entrance">The furnace is overheated. Let the tools cool down... 15:00
-          remaining</div>
+            <div class="input-group">
+              <input type="text" id="entrance-input" class="workspace-input" placeholder="Forge the passkey..."
+                autocomplete="off">
+              <button id="entrance-submit" class="forge-btn">unlock our forge</button>
+              <div class="lockout-info" id="lockout-entrance">The furnace is overheated. Let the tools cool down...
+                15:00 remaining</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1741,6 +2057,14 @@
         The heavy forge doors have closed behind you. Relax, play the music, and immerse yourself in the collaborative
         manuscript built line by line.
       </div>
+
+      <!-- Toggle for Forge Blueprints -->
+      <button id="toggle-blueprints-btn" class="blueprint-toggle-btn" onclick="toggleBlueprints()">
+        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor; margin-right: 8px;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+        </svg>
+        The Forge Logs
+      </button>
 
       <!-- Spotify Embed Layout -->
       <div class="sidebar-media-wrapper"
@@ -2790,8 +3114,186 @@
               effort worth it. I’d do it again in a heartbeat.
             </div>
           </div>
+
+          <div class="piece-container">
+            <div class="piece-header">
+              <span>Jason's Version: Josie's Bistro</span>
+              <span class="piece-author">Author: J</span>
+            </div>
+            <div class="piece-content">
+              "I've been waiting all day for this moment", sat Jason thinking. Absorbed in Mel's eyes, dreading the
+              arrival of the coming work week, relishing the moment we have finally. Our spot away from the stress of
+              life.
+              <br><br>
+              Cleaning the rain from my glasses, I glace over to you. I see you're doing the same. Full able to gaze
+              into each others eyes now, smiling warmly back to each other.
+              <br><br>
+              "What?" you tease. Knowing what I will say already. It's the same you desire.
+              <br><br>
+              "You're eyes, I've missed them." My smile growing. Rubbing my thumb over the back of your hand. Lightly
+              massaging the pain away.
+              <br><br>
+              You put your glasses back on. The rose color flushes me every time. I see your eyes, with the color of
+              love now, staring back, I melt every single time.
+              <br><br>
+              The music playing in the background starts to catch my attention. Realizing you've already chosen the
+              songs for the night. Intoxicated by what you are scheming now, I have to know.
+              <br><br>
+              The guitar, tickling inside my ear. You sense the change in behavior from me.
+              <br><br>
+              "What are you thinking, Love?" I hear you ask. Love... every time I heard her say it with her voice.
+              Calling me to her. "Love?" I hear you ask again, bringing me back to you. I smile deeply back at you. My
+              eyes softening. Putty in your hands.
+              <br><br>
+              "You, I'm always thinking of you." I'm still not comfortable with a nickname for her. I've been searching,
+              but they all are taken by bad memories, lost voices. She is my calm seas.
+              <br><br>
+              "My love though, what are you desiring tonight?" I calmly say "I see you've played us a melody, I'm
+              awaiting to see where the journey is leading us tonight." Mischievously smiling back now.
+              <br><br>
+              "Just this, just us, together." You say back.
+              <br><br>
+              "You're setting the mood for later. I'm sure you have some wine already picked out for the night?"
+              <br><br>
+              (I will not try. You're time to shine with wine :P)
+              <br><br>
+              You tease of the notes of cedar and the tartness of some floral bit. Things I had no idea to look for
+              before you.
+              <br><br>
+              Our waitress arrives just in time to interrupt us. "What are we having tonight?"
+              <br><br>
+              "We'll have a bottle of ...." you say excitedly.
+              <br><br>
+              I just stare in awe. The way your eyes light up when telling me about the wine. Every detail sounds
+              divine. Inviting in a way. Usually the alcohol is used to erase memories. With her, they do not go away.
+              They linger on my tongue. I still taste the last time we were together...
+              <br><br>
+              "Any appetizers today?" The dream broken again. Always interrupted when I'm dreaming of you.
+            </div>
+          </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- ARCHIVE SECTION: THE BLUEPRINTS SIDE-DRAWER -->
+    <div id="blueprints-drawer" class="blueprints-drawer">
+      <div class="blueprints-header">
+        <div class="blueprints-title">FORGE LOGS & BLUEPRINTS</div>
+        <button class="blueprints-close-btn" onclick="toggleBlueprints()">&times;</button>
+      </div>
+      <div class="blueprints-content">
+        <p class="blueprint-intro">
+          ARCHIVE REF // ORIGINAL PUZZLES & ARCHITECTURAL LOGS
+        </p>
+
+        <!-- Blueprint Entry 1: Gate Lock -->
+        <div class="blueprint-card">
+          <div class="blueprint-card-header">BLUEPRINT 01 // THE ENTRANCE GATE LOCK</div>
+          <div class="blueprint-meta">Target: Central Outer Gate // Mechanism: Verbal Password</div>
+          <div class="blueprint-body">
+            <p class="blueprint-label">LOGGED POEM & RIDDLE:</p>
+            <pre class="blueprint-text">
+A spark struck in a crowded space,
+Leaving the noise for a quieter pace.
+We built a world from line to line,
+Shifting the raw to something divine.
+
+From a certain point of view, you'll see,
+The edge of the page holds the passkey.
+Trace the margins where it all began,
+Recall the greeting, find the plan.
+
+Call out the name from that distant shore:
+The very first words at the hidden door.
+            </pre>
+            <div class="blueprint-answer-box">
+              <span class="blueprint-answer-label">UNSEALING PASSKEY:</span>
+              <span class="blueprint-answer-value">hello there obiwan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blueprint Entry 2: Cultivator's Chest -->
+        <div class="blueprint-card">
+          <div class="blueprint-card-header">BLUEPRINT 02 // THE CULTIVATOR'S CHEST</div>
+          <div class="blueprint-meta">Target: Left Workbench Chest // Mechanism: Hearth Lock</div>
+          <div class="blueprint-body">
+            <p class="blueprint-label">LOGGED POEM & RIDDLE:</p>
+            <pre class="blueprint-text">
+A quiet devotion carved in the dirt,
+Tending the soil, keeping frost from the hurt.
+You shape the wild earth with a patient hand,
+Building a sanctuary out of the land.
+
+You watch over the berries, the beds, and the green,
+Cultivating wonders that happen unseen.
+From the dirt on your hands to the life that ascends,
+You look for the beauty you capture and send.
+
+Awake in the sun, or unfurled in the night:
+What brings your lens focus to capture the light?
+            </pre>
+            <div class="blueprint-answer-box">
+              <span class="blueprint-answer-label">UNSEALING PASSKEY:</span>
+              <span class="blueprint-answer-value">flowers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blueprint Entry 3: Submariner's Vault -->
+        <div class="blueprint-card">
+          <div class="blueprint-card-header">BLUEPRINT 03 // THE SUBMARINER'S VAULT</div>
+          <div class="blueprint-meta">Target: Center Workbench Chest // Mechanism: Inscription Lock</div>
+          <div class="blueprint-body">
+            <p class="blueprint-label">LOGGED POEM & RIDDLE:</p>
+            <pre class="blueprint-text">
+A brilliant mind wrapped in a humble grace,
+Calibrating steel within a hidden space.
+No need for praise, no shouting from the crest,
+Just quiet focus put to every test.
+
+You braved the shadows where the sun ends,
+True to the path where absolute dark begins.
+A master of the craft beneath the rolling tide,
+With heavy pressure resting right outside.
+
+A captain's written word of appreciation stays:
+What honor names the excellence these lines praise?
+            </pre>
+            <div class="blueprint-answer-box">
+              <span class="blueprint-answer-label">UNSEALING PASSKEY:</span>
+              <span class="blueprint-answer-value">award / recognition / letter of appreciation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blueprint Entry 4: Writer's Vault -->
+        <div class="blueprint-card">
+          <div class="blueprint-card-header">BLUEPRINT 04 // THE WRITER'S VAULT</div>
+          <div class="blueprint-meta">Target: Right Workbench Chest // Mechanism: Memory Lock</div>
+          <div class="blueprint-body">
+            <p class="blueprint-label">LOGGED POEM & RIDDLE:</p>
+            <pre class="blueprint-text">
+A quiet pen can hold a heavy weight,
+Guarding the stories kept behind the gate.
+A hesitant hand, a cautious, careful phrase,
+Keeping the deepest thoughts inside the maze.
+
+But ink grows bold when shadows start to fade,
+Stepping beyond the filters nerves had made.
+One quiet night, the armor tumbled down,
+A beautiful courage, raw and newly found.
+
+When walls collapse and true connection speaks:
+What is the priceless gem the listener seeks?
+            </pre>
+            <div class="blueprint-answer-box">
+              <span class="blueprint-answer-label">UNSEALING PASSKEY:</span>
+              <span class="blueprint-answer-value">truth / honesty / vulnerability / trust</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2801,7 +3303,7 @@
     const CONFIG = {
       // Passkeys (Normalized versions are stripped of all spaces and in lowercase)
       passkeys: {
-        entrance: "hello there obiwan",
+        entrance: "calm seas",
         cultivator: ["flowers"],
         submariner: ["award", "recognition", "letterofrecognition", "letterofappreciation"],
         writer: ["truth", "honesty", "vulnerability", "trust"]
@@ -2857,123 +3359,13 @@
 
     let currentModalVault = null;
 
-    // Normalize text utility
+    // Normalize text utility (case-insensitive and forgiving of minor punctuation/spacing)
     function normalize(text) {
-      return text.toLowerCase().replace(/\s+/g, '');
+      if (!text) return '';
+      return text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, "").replace(/\s+/g, "");
     }
 
-    // Audio synthesizer for ambient forge/fireplace crackling sound
-    let audioCtx = null;
-    let rumbler = null;
-    let crackleInterval = null;
-    let isAudioPlaying = false;
-
-    const ambientAudioBtn = document.getElementById('ambient-audio-btn');
-
-    function toggleAmbientAudio() {
-      if (isAudioPlaying) {
-        stopAmbientAudio();
-      } else {
-        startAmbientAudio();
-      }
-    }
-
-    function startAmbientAudio() {
-      try {
-        if (!audioCtx) {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-
-        // 1. Procedural Low-Frequency Rumble (Warm hearth background)
-        const bufferSize = audioCtx.sampleRate * 2;
-        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        let lastOut = 0.0;
-
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          // Apply lowpass/brownian-style filtering for deep rumble
-          output[i] = (lastOut + (0.015 * white)) / 1.015;
-          lastOut = output[i];
-          output[i] *= 4.0;
-        }
-
-        rumbler = audioCtx.createBufferSource();
-        rumbler.buffer = noiseBuffer;
-        rumbler.loop = true;
-
-        const lowpass = audioCtx.createBiquadFilter();
-        lowpass.type = 'lowpass';
-        lowpass.frequency.setValueAtTime(140, audioCtx.currentTime);
-
-        const rumblerGain = audioCtx.createGain();
-        rumblerGain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-
-        rumbler.connect(lowpass);
-        lowpass.connect(rumblerGain);
-        rumblerGain.connect(audioCtx.destination);
-        rumbler.start();
-
-        // 2. Procedural Fire Crackles / Pops
-        crackleInterval = setInterval(() => {
-          if (!audioCtx || audioCtx.state === 'suspended') return;
-
-          if (Math.random() > 0.45) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            // Pop pitch sweep
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(900 + Math.random() * 1200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.012);
-
-            gain.gain.setValueAtTime(0.04 + Math.random() * 0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.012);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.015);
-          }
-        }, 85);
-
-        isAudioPlaying = true;
-        ambientAudioBtn.classList.add('active');
-        ambientAudioBtn.innerHTML = `
-          <svg viewBox="0 0 24 24">
-            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-          </svg>
-          Hearth Sounds: On
-        `;
-      } catch (e) {
-        console.error("Audio Context failed to start", e);
-      }
-    }
-
-    function stopAmbientAudio() {
-      if (rumbler) {
-        try { rumbler.stop(); } catch (e) { }
-        rumbler = null;
-      }
-      if (crackleInterval) {
-        clearInterval(crackleInterval);
-        crackleInterval = null;
-      }
-      isAudioPlaying = false;
-      ambientAudioBtn.classList.remove('active');
-      ambientAudioBtn.innerHTML = `
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-        </svg>
-        Hearth Sounds: Off
-      `;
-    }
-
-    ambientAudioBtn.addEventListener('click', toggleAmbientAudio);
+    // Audio synthesizer variables removed in favor of Spotify player embed
 
     // Dynamic fire embers visual generation
     const embersBg = document.getElementById('embers-bg');
@@ -3113,10 +3505,10 @@
       const targetVal = normalize(CONFIG.passkeys.entrance);
 
       if (userVal === targetVal) {
-        // Success: transition
+        // Success: transition directly to Stage 3 Sanctuary
         state.entranceSolved = true;
         state.attempts.entrance = 0;
-        state.stage = 'forge';
+        state.stage = 'sanctuary';
         saveState();
 
         // Play heavy door split opening animations
@@ -3124,8 +3516,11 @@
 
         setTimeout(() => {
           document.getElementById('landing-page').style.display = 'none';
-          document.getElementById('forge-floor').style.display = 'flex';
-          syncForgeFloorUI();
+          const sanctuary = document.getElementById('reading-sanctuary');
+          sanctuary.style.display = 'grid';
+          requestAnimationFrame(() => {
+            sanctuary.classList.add('active');
+          });
         }, 700);
 
       } else {
@@ -3404,7 +3799,7 @@
 
       // 2. Clear inputs and close modal
       entranceInput.value = '';
-      entranceInput.placeholder = "Call out the name...";
+      entranceInput.placeholder = "Forge the passkey...";
       modalInput.value = '';
       modalInput.placeholder = "Forge the answer...";
       closeVaultModal();
@@ -3433,6 +3828,18 @@
       const sanctuary = document.getElementById('reading-sanctuary');
       sanctuary.style.display = 'none';
       sanctuary.classList.remove('active');
+
+      const blueprintsDrawer = document.getElementById('blueprints-drawer');
+      if (blueprintsDrawer) {
+        blueprintsDrawer.classList.remove('active');
+      }
+    }
+
+    function toggleBlueprints() {
+      const drawer = document.getElementById('blueprints-drawer');
+      if (drawer) {
+        drawer.classList.toggle('active');
+      }
     }
 
     // Transition into Stage 3 Finale Reading Mode
