@@ -34,8 +34,12 @@
         .story-link:hover { color: #66fcf1; padding-left: 5px; transition: all 0.2s ease; }
         .author-tag { font-size: 0.75rem; color: #66fcf1; margin-left: 8px; letter-spacing: 1px; opacity: 0.8; }
         
-        .flex-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 600px) { .flex-list { grid-template-columns: 1fr; } }
+        .poem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        @media (max-width: 768px) { .poem-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 480px) { .poem-grid { grid-template-columns: 1fr; } }
+        
+        .shared-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .shared-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -54,9 +58,13 @@
         <main>
             <section class="section-card">
                 <h3>Section 1: A Poetic Opening</h3>
-                <ul class="flex-list">
-                    <li><a class="story-link" href="writing/seeking.html">Seeking <span class="author-tag">[M]</span></a></li>
-                    <li><a class="story-link" href="writing/found.html">Found <span class="author-tag">[J]</span></a></li>
+                <ul class="poem-grid">
+                    <li><a class="story-link" href="writing/seeking.html">Poem 1: Seeking <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/found.html">Poem 2: Found <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/m-morning-routine.html">Poem 3: Morning Routine <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/j-morning-routine.html">Poem 4: Morning Routine <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/vulnerability.html">Poem 5: Vulnerability <span class="author-tag">[J&M]</span></a></li>
+                    <li><a class="story-link" href="writing/content.html">Poem 6: Content <span class="author-tag">[M]</span></a></li>
                 </ul>
             </section>
 
@@ -64,6 +72,7 @@
                 <section class="library-card section-card">
                     <h2>Jason's Library</h2>
                     <ul>
+                        <li><span class="story-link" style="opacity: 0.4; cursor: not-allowed;">Chapter 1: message-1 [Missing]</span></li>
                         <li><a class="story-link" href="writing/for-us.html">Chapter 3: For Us <span class="author-tag">[J]</span></a></li>
                         <li><a class="story-link" href="writing/my-mind-wanders.html">Chapter 4: My Mind Wanders <span class="author-tag">[J]</span></a></li>
                         <li><a class="story-link" href="writing/ive-awoken.html">Chapter 6: I've Awoken <span class="author-tag">[J]</span></a></li>
@@ -86,10 +95,10 @@
             </div>
 
             <section class="section-card">
-                <h3>Section 3: Collaborative Works</h3>
-                <ul class="flex-list">
-                    <li><a class="story-link" href="writing/the-gallery-at-josies.html">Josie's Bistro: Mel's Version <span class="author-tag">[M]</span></a></li>
-                    <li><a class="story-link" href="writing/at-josies.html">Josie's Bistro: Jason's Version <span class="author-tag">[J]</span></a></li>
+                <h3>Section 3: Collaborative Writing</h3>
+                <ul class="shared-grid">
+                    <li><a class="story-link" href="writing/the-gallery-at-josies.html">Josie's Bistro - Mel's Version <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/at-josies.html">Josie's Bistro - Jason's Version <span class="author-tag">[J]</span></a></li>
                     <li><a class="story-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="author-tag">[M]</span></a></li>
                     <li><a class="story-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="author-tag">[J]</span></a></li>
                     <li><a class="story-link" href="writing/migraine-cure.html">Migraine Cure <span class="author-tag">[J]</span></a></li>
