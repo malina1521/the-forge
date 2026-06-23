@@ -9,7 +9,7 @@
         body { font-family: 'Comfortaa', sans-serif; background-color: #0b0c10; color: #c5c6c7; padding: 40px 20px; line-height: 1.8; }
         .container { max-width: 900px; margin: 0 auto; background: rgba(31, 40, 51, 0.6); padding: 40px; border-radius: 16px; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
         
-        /* Navigation and Security Bar Layout */
+        /* Navigation & Security Bar Layout */
         nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(102, 252, 241, 0.1); padding-bottom: 15px; }
         .nav-link { color: #66fcf1; text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; font-weight: 500; text-transform: uppercase; }
         .lock-btn { color: #66fcf1; text-decoration: none; font-size: 1.3rem; cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
@@ -19,17 +19,14 @@
         h1 { color: #ffffff; font-size: 3rem; margin-bottom: 10px; text-align: center; letter-spacing: 2px; }
         .subtitle { text-align: center; color: #66fcf1; font-size: 1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 0; }
         
-        .full-width-card { background: rgba(26, 34, 43, 0.9); border: 1px solid rgba(102, 252, 241, 0.2); padding: 30px; border-radius: 12px; margin-bottom: 30px; transition: border 0.3s ease; }
-        .full-width-card:hover { border-color: #66fcf1; }
+        .section-card { background: rgba(26, 34, 43, 0.9); border: 1px solid rgba(102, 252, 241, 0.15); padding: 30px; border-radius: 12px; margin-bottom: 30px; transition: border 0.3s ease; }
+        .section-card:hover { border-color: #66fcf1; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
         
-        .library-card { background: rgba(26, 34, 43, 0.8); border: 1px solid rgba(102, 252, 241, 0.1); padding: 30px; border-radius: 12px; transition: border 0.3s ease; }
-        .library-card:hover { border-color: #66fcf1; }
-        
-        h2 { color: #ffffff; font-size: 1.6rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; letter-spacing: 1px; }
-        h3 { color: #66fcf1; font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+        h2 { color: #ffffff; font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; letter-spacing: 1px; }
+        h3 { color: #66fcf1; font-size: 1.1rem; margin-top: 0; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; border-left: 2px solid #66fcf1; padding-left: 10px; }
         ul { list-style: none; padding: 0; margin: 0; }
         li { margin-bottom: 12px; }
         
@@ -55,42 +52,50 @@
         </header>
 
         <main>
-            <section class="full-width-card">
-                <h3>Featured Collaborative Works & Stories</h3>
+            <section class="section-card">
+                <h3>Section 1: A Poetic Opening</h3>
                 <ul class="flex-list">
-                    <li><a class="story-link" href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date <span class="author-tag">[M & J]</span></a></li>
-                    <li><a class="story-link" href="writing/a-perfect-day.html">A Perfect Day <span class="author-tag">[M]</span></a></li>
-                    <li><a class="story-link" href="writing/perspectives.html">Perspectives <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/seeking.html">Seeking <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/found.html">Found <span class="author-tag">[J]</span></a></li>
                 </ul>
             </section>
 
             <div class="grid">
-                <section class="library-card">
-                    <h2>M's Library</h2>
+                <section class="library-card section-card">
+                    <h2>Jason's Library</h2>
                     <ul>
-                        <li><a class="story-link" href="writing/for-you.html">For You <span class="author-tag">[M]</span></a></li>
-                        <li><a class="story-link" href="writing/let-me-take-care-of-you.html">Let Me Take Care Of You <span class="author-tag">[M]</span></a></li>
-                        <li><a class="story-link" href="writing/the-gallery-at-josies.html">The Gallery at Josie's <span class="author-tag">[M]</span></a></li>
-                        <li><a class="story-link" href="writing/release.html">Release <span class="author-tag">[M]</span></a></li>
-                        <li><a class="story-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="author-tag">[M]</span></a></li>
+                        <li><a class="story-link" href="writing/for-us.html">Chapter 3: For Us <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/my-mind-wanders.html">Chapter 4: My Mind Wanders <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/ive-awoken.html">Chapter 6: I've Awoken <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/shower-thoughts.html">Chapter 7: Shower Thoughts <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/secretly.html">Chapter 8: Secretly <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/recurring-dream.html">Chapter 9: Recurring Dream <span class="author-tag">[J]</span></a></li>
                     </ul>
                 </section>
 
-                <section class="library-card">
-                    <h2>J's Library</h2>
+                <section class="library-card section-card">
+                    <h2>Mel's Library</h2>
                     <ul>
-                        <li><a class="story-link" href="writing/for-us.html">For Us <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/my-mind-wanders.html">My Mind Wanders <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/ive-awoken.html">I've Awoken <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/shower-thoughts.html">Shower Thoughts <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/at-josies.html">At Josie's <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/secretly.html">Secretly <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/recurring-dream.html">Recurring Dream <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/migraine-cure.html">Migraine Cure <span class="author-tag">[J]</span></a></li>
-                        <li><a class="story-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="author-tag">[J]</span></a></li>
+                        <li><a class="story-link" href="writing/for-you.html">Chapter 2: For You <span class="author-tag">[M]</span></a></li>
+                        <li><a class="story-link" href="writing/let-me-take-care-of-you.html">Chapter 5: Let Me Take Care Of You <span class="author-tag">[M]</span></a></li>
+                        <li><a class="story-link" href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date <span class="author-tag">[M]</span></a></li>
+                        <li><a class="story-link" href="writing/release.html">Release <span class="author-tag">[M]</span></a></li>
+                        <li><a class="story-link" href="writing/perspectives.html">Perspectives <span class="author-tag">[M]</span></a></li>
                     </ul>
                 </section>
             </div>
+
+            <section class="section-card">
+                <h3>Section 3: Collaborative Works</h3>
+                <ul class="flex-list">
+                    <li><a class="story-link" href="writing/the-gallery-at-josies.html">Josie's Bistro: Mel's Version <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/at-josies.html">Josie's Bistro: Jason's Version <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/migraine-cure.html">Migraine Cure <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/a-perfect-day.html">A Perfect Day <span class="author-tag">[M]</span></a></li>
+                </ul>
+            </section>
         </main>
     </div>
 
