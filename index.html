@@ -3,205 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Word Smiths</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #0b0c10;
-            --text-color: #c5c6c7;
-            --accent-color: #66fcf1;
-            --secondary-color: #45f3ff;
-            --card-bg: rgba(31, 40, 51, 0.6);
-            --neon-glow: 0 0 10px rgba(102, 252, 241, 0.3), 0 0 20px rgba(102, 252, 241, 0.2);
-        }
-
-        body {
-            font-family: 'Comfortaa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            animation: backgroundMove 120s linear infinite;
-        }
-
-        @keyframes backgroundMove {
-            from { background-position: 0 0, 40px 60px, 130px 270px; }
-            to { background-position: 550px 550px, 390px 410px, 380px 820px; }
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 40px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            color: #ffffff;
-            text-shadow: var(--neon-glow);
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        /* Table of Contents Styling */
-        .toc-section {
-            text-align: left;
-            margin: 40px auto;
-            max-width: 700px;
-        }
-
-        .toc-section h2 {
-            color: #ffffff;
-            font-size: 1.6rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 8px;
-            margin-top: 30px;
-            text-shadow: 0 0 5px rgba(102, 252, 241, 0.2);
-        }
-
-        .toc-section h3 {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-left: 5px;
-        }
-
-        .toc-list {
-            list-style: none;
-            padding-left: 10px;
-            margin: 0;
-        }
-
-        .toc-list li {
-            margin-bottom: 12px;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        /* Cool neon custom bullet points */
-        .toc-list li::before {
-            content: "✦";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            text-shadow: 0 0 5px var(--secondary-color);
-            font-size: 0.9rem;
-        }
-
-        .toc-list a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .toc-list a:hover {
-            color: #ffffff;
-            text-shadow: var(--neon-glow);
-            padding-left: 5px;
-        }
-
-        footer {
-            margin-top: 60px;
-            font-size: 0.9rem;
-            color: rgba(197, 198, 199, 0.5);
-        }
-    </style>
+    <title>The Forge | Two Word Smiths</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Comfortaa', sans-serif; background-color: #0b0c10; color: #c5c6c7; padding: 40px 20px; line-height: 1.8; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(31, 40, 51, 0.6); padding: 40px; border-radius: 16px; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        /* Navigation and Security Bar Layout */
+        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(102, 252, 241, 0.1); padding-bottom: 15px; }
+        .nav-link { color: #66fcf1; text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; font-weight: 500; text-transform: uppercase; }
+        .lock-btn { color: #66fcf1; text-decoration: none; font-size: 1.3rem; cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
+        .lock-btn:hover { transform: scale(1.1); }
+
+        h1 { color: #ffffff; font-size: 3rem; margin-bottom: 10px; text-align: center; letter-spacing: 2px; }
+        .subtitle { text-align: center; color: #66fcf1; font-size: 1rem; margin-bottom: 50px; letter-spacing: 4px; text-transform: uppercase; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        
+        .library-card { background: rgba(26, 34, 43, 0.8); border: 1px solid rgba(102, 252, 241, 0.1); padding: 30px; border-radius: 12px; transition: border 0.3s ease; }
+        .library-card:hover { border-color: #66fcf1; }
+        
+        h2 { color: #ffffff; font-size: 1.6rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; letter-spacing: 1px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin-bottom: 12px; }
+        
+        .story-link { color: #c5c6c7; text-decoration: none; font-size: 1.05rem; transition: color 0.2s ease; display: block; }
+        .story-link:hover { color: #66fcf1; padding-left: 5px; transition: all 0.2s ease; }
+        .author-tag { font-size: 0.75rem; color: #66fcf1; margin-left: 8px; letter-spacing: 1px; opacity: 0.8; }
+    </style>
 </head>
 <body>
 
     <div class="container">
+        <nav>
+            <span class="nav-link">Central Terminal</span>
+            <a href="/cdn-cgi/access/logout" class="lock-btn" title="Lock Portal & Sign Out">🔒</a>
+        </nav>
+
         <header>
-            <h1>Two Word Smiths</h1>
-            <div class="subtitle">Digital Anthology</div>
+            <h1>THE FORGE</h1>
+            <p class="subtitle">Two Word Smiths</p>
         </header>
 
-        <main>
-            <div id="table-of-contents">
-                
-                <div class="toc-section">
-                    <h2>Section 1 - A Poetic Opening</h2>
-                    <ul class="toc-list">
-                        <li><a href="writing/seeking.html">Seeking</a></li>
-                        <li><a href="writing/found.html">Found</a></li>
-                        <li><a href="writing/m-morning-routine.html">M's Morning Routine</a></li>
-                        <li><a href="writing/j-morning-routine.html">J's Morning Routine</a></li>
-                        <li><a href="writing/vulnerability.html">Vulnerability</a></li>
-                        <li><a href="writing/content.html">Content</a></li>
-                    </ul>
-                </div>
+        <div class="grid">
+            <section class="library-card">
+                <h2>M's Library</h2>
+                <ul>
+                    <li><a class="story-link" href="writing/for-you.html">For You <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/let-me-take-care-of-you.html">Let Me Take Care Of You <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/the-gallery-at-josies.html">The Gallery at Josie's <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/release.html">Release <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/a-perfect-day.html">A Perfect Day <span class="author-tag">[M]</span></a></li>
+                    <li><a class="story-link" href="writing/perspectives.html">Perspectives <span class="author-tag">[M]</span></a></li>
+                </ul>
+            </section>
 
-                <div class="toc-section">
-                    <h2>Section 2 - Libraries</h2>
-                    
-                    <h3>J’s Library</h3>
-                    <ul class="toc-list">
-                        <li><a href="writing/not-yet.html">Chapter 1: Not Yet</a></li>
-                        <li><a href="writing/for-us.html">Chapter 3: For Us</a></li>
-                        <li><a href="writing/my-mind-wanders.html">Chapter 4: My Mind Wanders</a></li>
-                        <li><a href="writing/ive-awoken.html">Chapter 6: I've Awoken</a></li>
-                        <li><a href="writing/shower-thoughts.html">Chapter 7: Shower Thoughts</a></li>
-                        <li><a href="writing/secretly.html">Chapter 8: Secretly</a></li>
-                        <li><a href="writing/recurring-dream.html">Chapter 9: Recurring Dream</a></li>
-                    </ul>
-
-                    <h3>M’s Library</h3>
-                    <ul class="toc-list">
-                        <li><a href="writing/for-you.html">Chapter 2: For You</a></li>
-                        <li><a href="writing/let-me-take-care-of-you.html">Chapter 5: Let Me Take Care Of You</a></li>
-                        <li><a href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date (Jake & Nora)</a></li>
-                        <li><a href="writing/release.html">Release</a></li>
-                        <li><a href="writing/perspective.html">Perspective</a></li>
-                    </ul>
-                </div>
-
-                <div class="toc-section">
-                    <h2>Section 3 - Collaborative Works</h2>
-                    <ul class="toc-list">
-                        <li><a href="writing/gallery-at-josies.html">The Gallery At Josie's (Mel's Version)</a></li>
-                        <li><a href="writing/at-josies.html">At Josie's (Jason's Version)</a></li>
-                        <li><a href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay</a></li>
-                        <li><a href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her</a></li>
-                    </ul>
-                </div>
-
-                <div class="toc-section">
-                    <h2>Gallery & Blueprints</h2>
-                    <ul class="toc-list">
-                        <li><a href="writing/a-perfect-day.html">A Perfect Day</a></li>
-                        <li><a href="writing/migraine-cure.html">Migraine Cure</a></li>
-                    </ul>
-                </div>
-
-            </div>
-        </main>
-
-        <footer>
-            <p>&copy; 2026 Two Word Smiths. Protected via Cloudflare Access.</p>
-        </footer>
+            <section class="library-card">
+                <h2>J's Library</h2>
+                <ul>
+                    <li><a class="story-link" href="writing/for-us.html">For Us <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/my-mind-wanders.html">My Mind Wanders <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/ive-awoken.html">I've Awoken <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/shower-thoughts.html">Shower Thoughts <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/at-josies.html">At Josie's <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/secretly.html">Secretly <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/recurring-dream.html">Recurring Dream <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/migraine-cure.html">Migraine Cure <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="author-tag">[J]</span></a></li>
+                    <li><a class="story-link" href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date <span class="author-tag">[J&N]</span></a></li>
+                </ul>
+            </section>
+        </div>
     </div>
 
 </body>
