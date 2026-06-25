@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         /* Base Iron & Charcoal Hearth */
-        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; position: relative; overflow-x: hidden; min-height: 100vh; opacity: 1 !important; }
+        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; position: relative; overflow-x: hidden; min-height: 100vh; transition: opacity 0.4s ease; }
         
         /* Background Embers Canvas */
         #emberCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
@@ -20,9 +20,10 @@
             pointer-events: none;
             opacity: 0;
             filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.6));
+            /* Smoothly animate changes to coordinates and opacity */
             transition: transform 4s ease-in-out, opacity 1.5s ease-in-out, filter 2s ease;
         }
-        .container { position: relative; z-index: 2; max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .container { max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         
         /* The Security Crossbar Layout */
         nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255, 106, 0, 0.15); padding-bottom: 20px; }
@@ -53,7 +54,9 @@
         .heat-tag { font-size: 0.75rem; color: #ff6a00; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
         .cool-tag { font-size: 0.75rem; color: #00d2ff; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
         
-        .fade-out { opacity: 0 !important; transition: opacity 0.4s ease; }
+        /* Class to trigger the smooth fade out */
+        .fade-out { opacity: 0; pointer-events: none; }
+        body { transition: opacity 0.4s ease; }
         
         /* Grid Alignment Layouts */
         .spark-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
@@ -124,7 +127,6 @@
                 <section class="forge-hearth">
                     <h2>The Right Anvil: M's Ore</h2>
                     <ul>
-                        <li><a class="ingot-link" href="writing/danny-and-rose.html">Danny & Rose <span class="cool-tag">[M]</span></a></li>
                         <li><a class="ingot-link" href="writing/for-you.html">For You <span class="cool-tag">[M]</span></a></li>
                         <li><a class="ingot-link" href="writing/let-me-take-care-of-you.html">Let Me Take Care Of You <span class="cool-tag">[M]</span></a></li>
                         <li><a class="ingot-link" href="writing/a-perfect-day.html">A Perfect Day <span class="cool-tag">[M]</span></a></li>
@@ -177,107 +179,105 @@
 
         // --- Dynamic Magic Quill Flight Path ---
         const quill = document.getElementById('magicQuill');
-        if (quill) {
-            function flyQuill() {
-                const startX = Math.random() * 80 + 10; 
-                const startY = Math.random() * 30 + 60; 
-                const startAngle = Math.random() * 60 - 30; 
 
-                quill.style.transition = 'none';
-                quill.style.transform = `translate(${startX}vw, ${startY}vh) rotate(${startAngle}deg) scale(1)`;
+        function flyQuill() {
+            const startX = Math.random() * 80 + 10; 
+            const startY = Math.random() * 30 + 60; 
+            const startAngle = Math.random() * 60 - 30; 
+
+            quill.style.transition = 'none';
+            quill.style.transform = `translate(${startX}vw, ${startY}vh) rotate(${startAngle}deg) scale(1)`;
+            quill.style.opacity = '0';
+            quill.style.filter = 'drop-shadow(0 0 8px rgba(255, 106, 0, 0.6))';
+
+            quill.offsetHeight; // Force browser layout recalculation
+
+            const endX = Math.random() * 60 + 20; 
+            const endY = Math.random() * 40 + 15; 
+            const endAngle = startAngle + (Math.random() * 45 - 20); 
+
+            quill.style.transition = 'transform 3.5s ease-in-out, opacity 1.5s ease-in-out, filter 1.5s ease';
+            quill.style.opacity = '0.85';
+            quill.style.transform = `translate(${endX}vw, ${endY}vh) rotate(${endAngle}deg) scale(1.1)`;
+
+            setTimeout(() => {
+                quill.style.transition = 'transform 1.5s ease-in, opacity 1s ease-out, filter 1s ease';
                 quill.style.opacity = '0';
-                quill.style.filter = 'drop-shadow(0 0 8px rgba(255, 106, 0, 0.6))';
+                quill.style.transform = `translate(${endX + 5}vw, ${endY - 10}vh) rotate(${endAngle + 45}deg) scale(0)`;
+                quill.style.filter = 'drop-shadow(0 0 30px #ff2a00) blur(6px)';
+            }, 3500);
 
-                quill.offsetHeight;
-
-                const endX = Math.random() * 60 + 20; 
-                const endY = Math.random() * 40 + 15; 
-                const endAngle = startAngle + (Math.random() * 45 - 20); 
-
-                quill.style.transition = 'transform 3.5s ease-in-out, opacity 1.5s ease-in-out, filter 1.5s ease';
-                quill.style.opacity = '0.85';
-                quill.style.transform = `translate(${endX}vw, ${endY}vh) rotate(${endAngle}deg) scale(1.1)`;
-
-                setTimeout(() => {
-                    quill.style.transition = 'transform 1.5s ease-in, opacity 1s ease-out, filter 1s ease';
-                    quill.style.opacity = '0';
-                    quill.style.transform = `translate(${endX + 5}vw, ${endY - 10}vh) rotate(${endAngle + 45}deg) scale(0)`;
-                    quill.style.filter = 'drop-shadow(0 0 30px #ff2a00) blur(6px)';
-                }, 3500);
-
-                setTimeout(flyQuill, 6500); 
-            }
-            setTimeout(flyQuill, 1000);
+            setTimeout(flyQuill, 6500); 
         }
+
+        setTimeout(flyQuill, 1000);
 
         // --- Forge Ember Engine ---
         const canvas = document.getElementById('emberCanvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
-            const particles = [];
-            const maxParticles = 45; 
-
-            class Ember {
-                constructor() {
-                    this.reset();
-                    this.y = Math.random() * canvas.height; 
-                }
-
-                reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = canvas.height + Math.random() * 20;
-                    this.size = Math.random() * 3 + 1;
-                    this.speedY = Math.random() * 1.2 + 0.4;
-                    this.speedX = Math.sin(Math.random() * 2) * 0.5;
-                    this.alpha = Math.random() * 0.5 + 0.3;
-                    const colors = ['rgba(255, 106, 0, ', 'rgba(255, 68, 0, ', 'rgba(255, 174, 0, '];
-                    this.colorBase = colors[Math.floor(Math.random() * colors.length)];
-                }
-
-                update() {
-                    this.y -= this.speedY;
-                    this.x += this.speedX + (Math.sin(this.y / 30) * 0.2);
-                    this.alpha -= 0.0015;
-
-                    if (this.y < -10 || this.alpha <= 0) {
-                        this.reset();
-                    }
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.colorBase + this.alpha + ')';
-                    ctx.shadowBlur = this.size * 2;
-                    ctx.shadowColor = '#ff6a00';
-                    ctx.fill();
-                }
-            }
-
-            for (let i = 0; i < maxParticles; i++) {
-                particles.push(new Ember());
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.shadowBlur = 0; 
-                
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const maxParticles = 45; 
+
+        class Ember {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height; 
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 20;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 1.2 + 0.4;
+                this.speedX = Math.sin(Math.random() * 2) * 0.5;
+                this.alpha = Math.random() * 0.5 + 0.3;
+                const colors = ['rgba(255, 106, 0, ', 'rgba(255, 68, 0, ', 'rgba(255, 174, 0, '];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + (Math.sin(this.y / 30) * 0.2);
+                this.alpha -= 0.0015;
+
+                if (this.y < -10 || this.alpha <= 0) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.colorBase + this.alpha + ')';
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = '#ff6a00';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Ember());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0; 
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
