@@ -12,7 +12,7 @@
         /* Background Embers Canvas */
         #emberCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         
-        /* Floating, Disintegrating Magic Quill */
+       /* Floating, Disintegrating Magic Quill */
         #magicQuill {
             position: fixed;
             font-size: 2rem;
@@ -20,23 +20,8 @@
             pointer-events: none;
             opacity: 0;
             filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.6));
-            animation: forgeQuillCycle 8s infinite ease-in-out;
-        }
-
-        /* The Quill's Life Cycle: Float, Burn/Fade, Reappear Elsewhere */
-        @keyframes forgeQuillCycle {
-            0% { opacity: 0; transform: translate(10vw, 80vh) rotate(0deg) scale(1); }
-            10% { opacity: 0.8; }
-            45% { opacity: 0.9; transform: translate(45vw, 45vh) rotate(15deg) scale(1.1); filter: drop-shadow(0 0 12px #ff6a00); }
-            /* Disintegrating into the hearth fire */
-            50% { opacity: 0; transform: translate(50vw, 35vh) rotate(45deg) scale(0); filter: drop-shadow(0 0 25px #ff2a00) blur(4px); }
-            55% { opacity: 0; }
-            /* Teleporting to a completely different starting location */
-            56% { transform: translate(85vw, 75vh) rotate(-30deg) scale(1); }
-            65% { opacity: 0.7; }
-            90% { opacity: 0.8; transform: translate(55vw, 40vh) rotate(-10deg) scale(1.05); filter: drop-shadow(0 0 12px #ff6a00); }
-            /* Disintegrating again */
-            95%, 100% { opacity: 0; transform: translate(50vw, 35vh) rotate(-5deg) scale(0); filter: drop-shadow(0 0 25px #ff2a00) blur(4px); }
+            /* Smoothly animate changes to coordinates and opacity */
+            transition: transform 4s ease-in-out, opacity 1.5s ease-in-out, filter 2s ease;
         }
         .container { max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         
@@ -175,23 +160,51 @@
 </div>
 
     <script>
-        // Smoothly fade out the page body before navigating to a writing piece
-        document.querySelectorAll('.ingot-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Only apply to internal writing links, not logouts
-                if (this.getAttribute('href').includes('writing/')) {
-                    e.preventDefault();
-                    const destination = this.href;
-                    
-                    document.body.classList.add('fade-out');
-                    
-                    setTimeout(() => {
-                        window.location.href = destination;
-                    }, 400); // Matches the 0.4s CSS transition
-                }
-            });
-        });
-    </script>
+       // --- Dynamic Magic Quill Flight Path ---
+        const quill = document.getElementById('magicQuill');
+
+        function flyQuill() {
+            // 1. Pick a random starting point anywhere along the bottom half of the screen
+            const startX = Math.random() * 80 + 10; // between 10vw and 90vw
+            const startY = Math.random() * 30 + 60; // between 60vh and 90vh
+            const startAngle = Math.random() * 60 - 30; // random tilt
+
+            // Snap immediately to start position while invisible
+            quill.style.transition = 'none';
+            quill.style.transform = `translate(${startX}vw, ${startY}vh) rotate(${startAngle}deg) scale(1)`;
+            quill.style.opacity = '0';
+            quill.style.filter = 'drop-shadow(0 0 8px rgba(255, 106, 0, 0.6))';
+
+            // Force a browser redraw to register the instant snap
+            quill.offsetHeight;
+
+            // 2. Pick a completely random "Forge Fire" destination anywhere in the upper/middle screen
+            const endX = Math.random() * 60 + 20; // between 20vw and 80vw
+            const endY = Math.random() * 40 + 15; // between 15vh and 55vh
+            const endAngle = startAngle + (Math.random() * 45 - 20); // slight twist during flight
+
+            // Turn transitions back on for the flight phase
+            quill.style.transition = 'transform 3.5s ease-in-out, opacity 1.5s ease-in-out, filter 1.5s ease';
+            
+            // Fade in and glide to the destination
+            quill.style.opacity = '0.85';
+            quill.style.transform = `translate(${endX}vw, ${endY}vh) rotate(${endAngle}deg) scale(1.1)`;
+
+            // 3. Trigger the disintegration right as it hits the destination
+            setTimeout(() => {
+                quill.style.transition = 'transform 1.5s ease-in, opacity 1s ease-out, filter 1s ease';
+                quill.style.opacity = '0';
+                // Shrink, spin, blur, and flash bright red/orange as it burns
+                quill.style.transform = `translate(${endX + 5}vw, ${endY - 10}vh) rotate(${endAngle + 45}deg) scale(0)`;
+                quill.style.filter = 'drop-shadow(0 0 30px #ff2a00) blur(6px)';
+            }, 3500); // Happens at the end of the 3.5s flight
+
+            // 4. Wait out the cooldown, then spawn a brand new flight path
+            setTimeout(flyQuill, 6500); 
+        }
+
+        // Start the infinite loop after a brief initial delay
+        setTimeout(flyQuill, 1000);
     <script>
         // --- Forge Ember Engine ---
         const canvas = document.getElementById('emberCanvas');
