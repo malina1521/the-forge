@@ -46,6 +46,18 @@
         
         .alloy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .alloy-grid { grid-template-columns: 1fr; } }
+        /* Echoes of the Hearth: Music Section Layout */
+        .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
+        @media (max-width: 768px) { .music-grid { grid-template-columns: 1fr; } }
+        
+        .playlist-card { 
+            background: rgba(13, 14, 18, 0.6); 
+            border-radius: 12px; 
+            padding: 4px; 
+            border: 1px solid rgba(255, 106, 0, 0.05);
+            transition: border-color 0.3s ease;
+        }
+        .playlist-card:hover { border-color: rgba(255, 106, 0, 0.2); }
     </style>
 </head>
 <body>
@@ -111,6 +123,18 @@
                     <li><a class="ingot-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="cool-tag">(by M)</span></a></li>
                     <li><a class="ingot-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="heat-tag">(by J)</span></a></li>
                 </ul>
+            </section>
+         <section class="forge-hearth">
+                <h3>Section 4: Echoes of the Hearth</h3>
+                <div class="music-grid">
+                    <div class="playlist-card">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tGrrzkiesswsgsrdh8Qrj?utm_source=generator&theme=0&si=aa9a2058195641c3" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+
+                    <div class="playlist-card">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/52XHaZDD6HtF5qM5bdINTg?utm_source=generator&theme=0&si=97c6720398084928" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
