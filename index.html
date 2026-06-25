@@ -1,283 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Forge | Two Word Smiths</title>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* Base Iron & Charcoal Hearth */
-        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; position: relative; overflow-x: hidden; min-height: 100vh; transition: opacity 0.4s ease; }
-        
-        /* Background Embers Canvas */
-        #emberCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        
-        /* Floating, Disintegrating Magic Quill */
-        #magicQuill {
-            position: fixed;
-            font-size: 2rem;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0;
-            filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.6));
-            /* Smoothly animate changes to coordinates and opacity */
-            transition: transform 4s ease-in-out, opacity 1.5s ease-in-out, filter 2s ease;
-        }
-        .container { max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        
-        /* The Security Crossbar Layout */
-        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255, 106, 0, 0.15); padding-bottom: 20px; }
-        .nav-link { color: #ff6a00; text-decoration: none; font-size: 0.85rem; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 8px rgba(255, 106, 0, 0.3); }
-        .lock-btn { color: #ff6a00; text-decoration: none; font-size: 1.4rem; cursor: pointer; transition: transform 0.2s ease, text-shadow 0.2s ease; display: inline-block; }
-        .lock-btn:hover { transform: scale(1.1); text-shadow: 0 0 12px #ff6a00; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Forge | Two Word Smiths</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Iron & Charcoal Hearth */
+        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; position: relative; overflow-x: hidden; min-height: 100vh; opacity: 1 !important; }
+        
+        /* Background Embers Canvas */
+        #emberCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        
+        /* Floating, Disintegrating Magic Quill */
+        #magicQuill {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0;
+            filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.6));
+            transition: transform 4s ease-in-out, opacity 1.5s ease-in-out, filter 2s ease;
+        }
+        .container { position: relative; z-index: 2; max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        /* The Security Crossbar Layout */
+        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255, 106, 0, 0.15); padding-bottom: 20px; }
+        .nav-link { color: #ff6a00; text-decoration: none; font-size: 0.85rem; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 8px rgba(255, 106, 0, 0.3); }
+        .lock-btn { color: #ff6a00; text-decoration: none; font-size: 1.4rem; cursor: pointer; transition: transform 0.2s ease, text-shadow 0.2s ease; display: inline-block; }
+        .lock-btn:hover { transform: scale(1.1); text-shadow: 0 0 12px #ff6a00; }
 
-        header { margin-bottom: 50px; text-align: center; position: relative; }
-        h1 { color: #ffffff; font-size: 3.5rem; margin-bottom: 5px; letter-spacing: 4px; font-weight: 700; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .subtitle { color: #ff6a00; font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 0; font-weight: 500; }
-        
-        /* Forge Hearth Blocks */
-        .forge-hearth { background: rgba(18, 20, 26, 0.8); border: 1px solid rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; margin-bottom: 35px; transition: border 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
-        .forge-hearth:hover { border-color: rgba(255, 106, 0, 0.3); box-shadow: 0 0 25px rgba(255, 106, 0, 0.05); }
-        
-        .anvil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; margin-bottom: 35px; }
-        @media (max-width: 768px) { .anvil-grid { grid-template-columns: 1fr; } }
-        
-        /* Molten Typography */
-        h2 { color: #ffffff; font-size: 1.4rem; margin-top: 0; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; }
-        h3 { color: #ff6a00; font-size: 1.05rem; margin-top: 0; margin-bottom: 25px; letter-spacing: 3px; text-transform: uppercase; border-left: 3px solid #ff6a00; padding-left: 12px; }
-        ul { list-style: none; padding: 0; margin: 0; }
-        li { margin-bottom: 14px; }
-        
-        /* Ore Links */
-        .ingot-link { color: #9da1aa; text-decoration: none; font-size: 1.05rem; transition: all 0.25s ease, opacity 0.4s ease; display: inline-block; }
-        .ingot-link:hover { color: #ffffff; padding-left: 8px; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-        .heat-tag { font-size: 0.75rem; color: #ff6a00; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
-        .cool-tag { font-size: 0.75rem; color: #00d2ff; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
-        
-        /* Class to trigger the smooth fade out */
-        .fade-out { opacity: 0; pointer-events: none; }
-        body { transition: opacity 0.4s ease; }
-        
-        /* Grid Alignment Layouts */
-        .spark-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .spark-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 480px) { .spark-grid { grid-template-columns: 1fr; } }
-        
-        .alloy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 600px) { .alloy-grid { grid-template-columns: 1fr; } }
-        
-        /* Echoes of the Hearth: Music Section Layout */
-        .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
-        @media (max-width: 768px) { .music-grid { grid-template-columns: 1fr; } }
-        
-        .playlist-card { 
-            background: rgba(13, 14, 18, 0.6); 
-            border-radius: 12px; 
-            padding: 4px; 
-            border: 1px solid rgba(255, 106, 0, 0.05);
-            transition: border-color 0.3s ease;
-        }
-        .playlist-card:hover { border-color: rgba(255, 106, 0, 0.2); }
-    </style>
+        header { margin-bottom: 50px; text-align: center; position: relative; }
+        h1 { color: #ffffff; font-size: 3.5rem; margin-bottom: 5px; letter-spacing: 4px; font-weight: 700; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .subtitle { color: #ff6a00; font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 0; font-weight: 500; }
+        
+        /* Forge Hearth Blocks */
+        .forge-hearth { background: rgba(18, 20, 26, 0.8); border: 1px solid rgba(255, 255, 255, 0.03); padding: 35px; border-radius: 12px; margin-bottom: 35px; transition: border 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
+        .forge-hearth:hover { border-color: rgba(255, 106, 0, 0.3); box-shadow: 0 0 25px rgba(255, 106, 0, 0.05); }
+        
+        .anvil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; margin-bottom: 35px; }
+        @media (max-width: 768px) { .anvil-grid { grid-template-columns: 1fr; } }
+        
+        /* Molten Typography */
+        h2 { color: #ffffff; font-size: 1.4rem; margin-top: 0; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; }
+        h3 { color: #ff6a00; font-size: 1.05rem; margin-top: 0; margin-bottom: 25px; letter-spacing: 3px; text-transform: uppercase; border-left: 3px solid #ff6a00; padding-left: 12px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin-bottom: 14px; }
+        
+        /* Ore Links */
+        .ingot-link { color: #9da1aa; text-decoration: none; font-size: 1.05rem; transition: all 0.25s ease, opacity 0.4s ease; display: inline-block; }
+        .ingot-link:hover { color: #ffffff; padding-left: 8px; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .heat-tag { font-size: 0.75rem; color: #ff6a00; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
+        .cool-tag { font-size: 0.75rem; color: #00d2ff; margin-left: 10px; letter-spacing: 1px; font-weight: 700; opacity: 0.8; text-transform: uppercase; }
+        
+        .fade-out { opacity: 0 !important; transition: opacity 0.4s ease; }
+        
+        /* Grid Alignment Layouts */
+        .spark-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .spark-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 480px) { .spark-grid { grid-template-columns: 1fr; } }
+        
+        .alloy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .alloy-grid { grid-template-columns: 1fr; } }
+        
+        /* Echoes of the Hearth: Music Section Layout */
+        .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
+        @media (max-width: 768px) { .music-grid { grid-template-columns: 1fr; } }
+        
+        .playlist-card { 
+            background: rgba(13, 14, 18, 0.6); 
+            border-radius: 12px; 
+            padding: 4px; 
+            border: 1px solid rgba(255, 106, 0, 0.05);
+            transition: border-color 0.3s ease;
+        }
+        .playlist-card:hover { border-color: rgba(255, 106, 0, 0.2); }
+    </style>
 </head>
 <body>
-    <canvas id="emberCanvas"></canvas>
-    <div id="magicQuill">🪶</div>
+    <canvas id="emberCanvas"></canvas>
+    <div id="magicQuill">🪶</div>
 
-    <div class="container">
-        <nav>
-            <span class="nav-link">Hearth Safety Protocol Active</span>
-            <a href="/cdn-cgi/access/logout" class="lock-btn" title="Quench Fire & Lock Portal">🔒</a>
-        </nav>
+    <div class="container">
+        <nav>
+            <span class="nav-link">Hearth Safety Protocol Active</span>
+            <a href="/cdn-cgi/access/logout" class="lock-btn" title="Quench Fire & Lock Portal">🔒</a>
+        </nav>
 
-        <header>
-            <h1>THE FORGE</h1>
-            <p class="subtitle">Two Word Smiths</p>
-        </header>
+        <header>
+            <h1>THE FORGE</h1>
+            <p class="subtitle">Two Word Smiths</p>
+        </header>
 
-        <main>
-            <section class="forge-hearth">
-                <h3>Section 1: The Sparks</h3>
-                <ul class="spark-grid">
-                    <li><a class="ingot-link" href="writing/Seeking.html">Seeking <span class="cool-tag">[M]</span></a></li>
-                    <li><a class="ingot-link" href="writing/found.html">Found <span class="heat-tag">[J]</span></a></li>
-                    <li><a class="ingot-link" href="writing/m-morning-routine.html">M's Morning Routine <span class="cool-tag">[M]</span></a></li>
-                    <li><a class="ingot-link" href="writing/j-morning-routine.html">J's Morning Routine <span class="heat-tag">[J]</span></a></li>
-                    <li><a class="ingot-link" href="writing/vulnerability.html">Vulnerability <span class="heat-tag">[J]</span></a></li>
-                    <li><a class="ingot-link" href="writing/content.html">Content <span class="cool-tag">[M]</span></a></li>
-                    <li><a class="ingot-link" href="writing/morning-brew.html">Morning Brew <span class="cool-tag">[M]</span></a></li>
-                </ul>
-            </section>
+        <main>
+            <section class="forge-hearth">
+                <h3>Section 1: The Sparks</h3>
+                <ul class="spark-grid">
+                    <li><a class="ingot-link" href="writing/Seeking.html">Seeking <span class="cool-tag">[M]</span></a></li>
+                    <li><a class="ingot-link" href="writing/found.html">Found <span class="heat-tag">[J]</span></a></li>
+                    <li><a class="ingot-link" href="writing/m-morning-routine.html">M's Morning Routine <span class="cool-tag">[M]</span></a></li>
+                    <li><a class="ingot-link" href="writing/j-morning-routine.html">J's Morning Routine <span class="heat-tag">[J]</span></a></li>
+                    <li><a class="ingot-link" href="writing/vulnerability.html">Vulnerability <span class="heat-tag">[J]</span></a></li>
+                    <li><a class="ingot-link" href="writing/content.html">Content <span class="cool-tag">[M]</span></a></li>
+                    <li><a class="ingot-link" href="writing/morning-brew.html">Morning Brew <span class="cool-tag">[M]</span></a></li>
+                </ul>
+            </section>
 
-            <div class="anvil-grid">
-                <section class="forge-hearth">
-                    <h2>The Left Anvil: J's Ore</h2>
-                    <ul>
-                        <li><a class="ingot-link" href="writing/not-yet.html">Not Yet <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/for-us.html">For Us <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/my-mind-wanders.html">My Mind Wanders <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/ive-awoken.html">I've Awoken <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/shower-thoughts.html">Shower Thoughts <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/secretly.html">Secretly <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/recurring-dream.html">Recurring Dream <span class="heat-tag">[J]</span></a></li>
-                        <li><a class="ingot-link" href="writing/migraine-cure.html">Migraine Cure <span class="heat-tag">[J]</span></a></li>
-                    </ul>
-                </section>
+            <div class="anvil-grid">
+                <section class="forge-hearth">
+                    <h2>The Left Anvil: J's Ore</h2>
+                    <ul>
+                        <li><a class="ingot-link" href="writing/not-yet.html">Not Yet <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/for-us.html">For Us <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/my-mind-wanders.html">My Mind Wanders <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/ive-awoken.html">I've Awoken <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/shower-thoughts.html">Shower Thoughts <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/secretly.html">Secretly <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/recurring-dream.html">Recurring Dream <span class="heat-tag">[J]</span></a></li>
+                        <li><a class="ingot-link" href="writing/migraine-cure.html">Migraine Cure <span class="heat-tag">[J]</span></a></li>
+                    </ul>
+                </section>
 
-                <section class="forge-hearth">
-                    <h2>The Right Anvil: M's Ore</h2>
-                    <ul>
-                        <li><a class="ingot-link" href="writing/for-you.html">For You <span class="cool-tag">[M]</span></a></li>
-                        <li><a class="ingot-link" href="writing/let-me-take-care-of-you.html">Let Me Take Care Of You <span class="cool-tag">[M]</span></a></li>
-                        <li><a class="ingot-link" href="writing/a-perfect-day.html">A Perfect Day <span class="cool-tag">[M]</span></a></li>
-                        <li><a class="ingot-link" href="writing/release.html">Release <span class="cool-tag">[M]</span></a></li>
-                        <li><a class="ingot-link" href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date <span class="cool-tag">[M]</span></a></li>
-                        <li><a class="ingot-link" href="writing/perspective.html">Perspective <span class="cool-tag">[M]</span></a></li>
-                    </ul>
-                </section>
-            </div>
+                <section class="forge-hearth">
+                    <h2>The Right Anvil: M's Ore</h2>
+                    <ul>
+                        <li><a class="ingot-link" href="writing/danny-and-rose.html">Danny & Rose <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/for-you.html">For You <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/let-me-take-care-of-you.html">Let Me Take Care Of You <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/a-perfect-day.html">A Perfect Day <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/release.html">Release <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/it-wasnt-even-a-date.html">It Wasn't Even A Date <span class="cool-tag">[M]</span></a></li>
+                        <li><a class="ingot-link" href="writing/perspective.html">Perspective <span class="cool-tag">[M]</span></a></li>
+                    </ul>
+                </section>
+            </div>
 
-            <section class="forge-hearth">
-                <h3>Section 3: The Alloy</h3>
-                <ul class="alloy-grid">
-                    <li><a class="ingot-link" href="writing/gallery-at-josies.html">The Gallery At Josie's <span class="cool-tag">(by M)</span></a></li>
-                    <li><a class="ingot-link" href="writing/at-josies.html">At Josie's <span class="heat-tag">(by J)</span></a></li>
-                    <li><a class="ingot-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="cool-tag">(by M)</span></a></li>
-                    <li><a class="ingot-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="heat-tag">(by J)</span></a></li>
-                </ul>
-            </section>
+            <section class="forge-hearth">
+                <h3>Section 3: The Alloy</h3>
+                <ul class="alloy-grid">
+                    <li><a class="ingot-link" href="writing/gallery-at-josies.html">The Gallery At Josie's <span class="cool-tag">(by M)</span></a></li>
+                    <li><a class="ingot-link" href="writing/at-josies.html">At Josie's <span class="heat-tag">(by J)</span></a></li>
+                    <li><a class="ingot-link" href="writing/silk-ties-foreplay.html">Silk Ties - Foreplay <span class="cool-tag">(by M)</span></a></li>
+                    <li><a class="ingot-link" href="writing/silk-ties-finish-her.html">Silk Ties - Finish Her <span class="heat-tag">(by J)</span></a></li>
+                </ul>
+            </section>
 
-            <section class="forge-hearth">
-                <h3>Section 4: Echoes of the Hearth</h3>
-                <div class="music-grid">
-                    <div class="playlist-card">
-                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tGrrzkiesswsgsrdh8Qrj?utm_source=generator&theme=0&si=aa9a2058195641c3" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    </div>
+            <section class="forge-hearth">
+                <h3>Section 4: Echoes of the Hearth</h3>
+                <div class="music-grid">
+                    <div class="playlist-card">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tGrrzkiesswsgsrdh8Qrj?utm_source=generator&theme=0&si=aa9a2058195641c3" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
 
-                    <div class="playlist-card">
-                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/52XHaZDD6HtF5qM5bdINTg?utm_source=generator&theme=0&si=97c6720398084928" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+                    <div class="playlist-card">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/52XHaZDD6HtF5qM5bdINTg?utm_source=generator&theme=0&si=97c6720398084928" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-    <script>
-        // --- Smooth Page Transition ---
-        document.querySelectorAll('.ingot-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href').includes('writing/')) {
-                    e.preventDefault();
-                    const destination = this.href;
-                    document.body.classList.add('fade-out');
-                    setTimeout(() => {
-                        window.location.href = destination;
-                    }, 400);
-                }
-            });
-        });
+    <script>
+        // --- Smooth Page Transition ---
+        document.querySelectorAll('.ingot-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href').includes('writing/')) {
+                    e.preventDefault();
+                    const destination = this.href;
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = destination;
+                    }, 400);
+                }
+            });
+        });
 
-        // --- Dynamic Magic Quill Flight Path ---
-        const quill = document.getElementById('magicQuill');
+        // --- Dynamic Magic Quill Flight Path ---
+        const quill = document.getElementById('magicQuill');
+        if (quill) {
+            function flyQuill() {
+                const startX = Math.random() * 80 + 10; 
+                const startY = Math.random() * 30 + 60; 
+                const startAngle = Math.random() * 60 - 30; 
 
-        function flyQuill() {
-            const startX = Math.random() * 80 + 10; 
-            const startY = Math.random() * 30 + 60; 
-            const startAngle = Math.random() * 60 - 30; 
+                quill.style.transition = 'none';
+                quill.style.transform = `translate(${startX}vw, ${startY}vh) rotate(${startAngle}deg) scale(1)`;
+                quill.style.opacity = '0';
+                quill.style.filter = 'drop-shadow(0 0 8px rgba(255, 106, 0, 0.6))';
 
-            quill.style.transition = 'none';
-            quill.style.transform = `translate(${startX}vw, ${startY}vh) rotate(${startAngle}deg) scale(1)`;
-            quill.style.opacity = '0';
-            quill.style.filter = 'drop-shadow(0 0 8px rgba(255, 106, 0, 0.6))';
+                quill.offsetHeight;
 
-            quill.offsetHeight; // Force browser layout recalculation
+                const endX = Math.random() * 60 + 20; 
+                const endY = Math.random() * 40 + 15; 
+                const endAngle = startAngle + (Math.random() * 45 - 20); 
 
-            const endX = Math.random() * 60 + 20; 
-            const endY = Math.random() * 40 + 15; 
-            const endAngle = startAngle + (Math.random() * 45 - 20); 
+                quill.style.transition = 'transform 3.5s ease-in-out, opacity 1.5s ease-in-out, filter 1.5s ease';
+                quill.style.opacity = '0.85';
+                quill.style.transform = `translate(${endX}vw, ${endY}vh) rotate(${endAngle}deg) scale(1.1)`;
 
-            quill.style.transition = 'transform 3.5s ease-in-out, opacity 1.5s ease-in-out, filter 1.5s ease';
-            quill.style.opacity = '0.85';
-            quill.style.transform = `translate(${endX}vw, ${endY}vh) rotate(${endAngle}deg) scale(1.1)`;
+                setTimeout(() => {
+                    quill.style.transition = 'transform 1.5s ease-in, opacity 1s ease-out, filter 1s ease';
+                    quill.style.opacity = '0';
+                    quill.style.transform = `translate(${endX + 5}vw, ${endY - 10}vh) rotate(${endAngle + 45}deg) scale(0)`;
+                    quill.style.filter = 'drop-shadow(0 0 30px #ff2a00) blur(6px)';
+                }, 3500);
 
-            setTimeout(() => {
-                quill.style.transition = 'transform 1.5s ease-in, opacity 1s ease-out, filter 1s ease';
-                quill.style.opacity = '0';
-                quill.style.transform = `translate(${endX + 5}vw, ${endY - 10}vh) rotate(${endAngle + 45}deg) scale(0)`;
-                quill.style.filter = 'drop-shadow(0 0 30px #ff2a00) blur(6px)';
-            }, 3500);
+                setTimeout(flyQuill, 6500); 
+            }
+            setTimeout(flyQuill, 1000);
+        }
 
-            setTimeout(flyQuill, 6500); 
-        }
+        // --- Forge Ember Engine ---
+        const canvas = document.getElementById('emberCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
 
-        setTimeout(flyQuill, 1000);
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
-        // --- Forge Ember Engine ---
-        const canvas = document.getElementById('emberCanvas');
-        const ctx = canvas.getContext('2d');
+            const particles = [];
+            const maxParticles = 45; 
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+            class Ember {
+                constructor() {
+                    this.reset();
+                    this.y = Math.random() * canvas.height; 
+                }
 
-        const particles = [];
-        const maxParticles = 45; 
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 20;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * 1.2 + 0.4;
+                    this.speedX = Math.sin(Math.random() * 2) * 0.5;
+                    this.alpha = Math.random() * 0.5 + 0.3;
+                    const colors = ['rgba(255, 106, 0, ', 'rgba(255, 68, 0, ', 'rgba(255, 174, 0, '];
+                    this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+                }
 
-        class Ember {
-            constructor() {
-                this.reset();
-                this.y = Math.random() * canvas.height; 
-            }
+                update() {
+                    this.y -= this.speedY;
+                    this.x += this.speedX + (Math.sin(this.y / 30) * 0.2);
+                    this.alpha -= 0.0015;
 
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + Math.random() * 20;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 1.2 + 0.4;
-                this.speedX = Math.sin(Math.random() * 2) * 0.5;
-                this.alpha = Math.random() * 0.5 + 0.3;
-                const colors = ['rgba(255, 106, 0, ', 'rgba(255, 68, 0, ', 'rgba(255, 174, 0, '];
-                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
-            }
+                    if (this.y < -10 || this.alpha <= 0) {
+                        this.reset();
+                    }
+                }
 
-            update() {
-                this.y -= this.speedY;
-                this.x += this.speedX + (Math.sin(this.y / 30) * 0.2);
-                this.alpha -= 0.0015;
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.colorBase + this.alpha + ')';
+                    ctx.shadowBlur = this.size * 2;
+                    ctx.shadowColor = '#ff6a00';
+                    ctx.fill();
+                }
+            }
 
-                if (this.y < -10 || this.alpha <= 0) {
-                    this.reset();
-                }
-            }
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Ember());
+            }
 
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.colorBase + this.alpha + ')';
-                ctx.shadowBlur = this.size * 2;
-                ctx.shadowColor = '#ff6a00';
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < maxParticles; i++) {
-            particles.push(new Ember());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.shadowBlur = 0; 
-            
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.shadowBlur = 0; 
+                
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
 </body>
 </html>
