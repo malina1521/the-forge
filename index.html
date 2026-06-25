@@ -7,7 +7,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         /* Base Iron & Charcoal Hearth */
-        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; }
+        body { font-family: 'Comfortaa', sans-serif; background-color: #0d0e12; color: #b2b5bd; padding: 40px 20px; line-height: 1.8; position: relative; overflow-x: hidden; min-height: 100vh; transition: opacity 0.4s ease; }
+        
+        /* Background Embers Canvas */
+        #emberCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        
+        /* Floating, Disintegrating Magic Quill */
+        #magicQuill {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0;
+            filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.6));
+            animation: forgeQuillCycle 8s infinite ease-in-out;
+        }
+
+        /* The Quill's Life Cycle: Float, Burn/Fade, Reappear Elsewhere */
+        @keyframes forgeQuillCycle {
+            0% { opacity: 0; transform: translate(10vw, 80vh) rotate(0deg) scale(1); }
+            10% { opacity: 0.8; }
+            45% { opacity: 0.9; transform: translate(45vw, 45vh) rotate(15deg) scale(1.1); filter: drop-shadow(0 0 12px #ff6a00); }
+            /* Disintegrating into the hearth fire */
+            50% { opacity: 0; transform: translate(50vw, 35vh) rotate(45deg) scale(0); filter: drop-shadow(0 0 25px #ff2a00) blur(4px); }
+            55% { opacity: 0; }
+            /* Teleporting to a completely different starting location */
+            56% { transform: translate(85vw, 75vh) rotate(-30deg) scale(1); }
+            65% { opacity: 0.7; }
+            90% { opacity: 0.8; transform: translate(55vw, 40vh) rotate(-10deg) scale(1.05); filter: drop-shadow(0 0 12px #ff6a00); }
+            /* Disintegrating again */
+            95%, 100% { opacity: 0; transform: translate(50vw, 35vh) rotate(-5deg) scale(0); filter: drop-shadow(0 0 25px #ff2a00) blur(4px); }
+        }
         .container { max-width: 950px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 22, 28, 0.9), rgba(10, 11, 14, 0.95)); padding: 45px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 106, 0, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         
         /* The Security Crossbar Layout */
@@ -63,6 +93,8 @@
     </style>
 </head>
 <body>
+    <canvas id="emberCanvas"></canvas>
+    <div id="magicQuill">🪶</div>
 
     <div class="container">
         <nav>
@@ -160,7 +192,78 @@
             });
         });
     </script>
-</body>
-</html>
+    <script>
+        // --- Forge Ember Engine ---
+        const canvas = document.getElementById('emberCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas dynamically
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const maxParticles = 45; // Subtle and clean, not overwhelming
+
+        class Ember {
+            constructor() {
+                this.reset();
+                // Random initial Y so they don't all spawn at the bottom at the exact same time
+                this.y = Math.random() * canvas.height; 
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 20;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 1.2 + 0.4;
+                this.speedX = Math.sin(Math.random() * 2) * 0.5;
+                this.alpha = Math.random() * 0.5 + 0.3;
+                // Varying shades of molten forge orange/yellow
+                const colors = ['rgba(255, 106, 0, ', 'rgba(255, 68, 0, ', 'rgba(255, 174, 0, '];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + (Math.sin(this.y / 30) * 0.2); // Gentle drift
+                this.alpha -= 0.0015; // Slow burn out as they rise
+
+                if (this.y < -10 || this.alpha <= 0) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.colorBase + this.alpha + ')';
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = '#ff6a00';
+                ctx.fill();
+            }
+        }
+
+        // Initialize particle array
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Ember());
+        }
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0; // Clear shadow for performance step
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
