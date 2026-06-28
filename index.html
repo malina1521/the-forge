@@ -159,6 +159,17 @@
                     </div>
                 </div>
             </section>
+            
+            </section> <section class="forge-hearth">
+                <h3>Section 5: The Chronicle</h3>
+                <ul>
+                    <li>
+                        <a class="ingot-link" href="calendar.html">
+                            Open The Forge Timeline <span class="heat-tag">[Shared]</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
         </main>
     </div>
 
@@ -166,12 +177,14 @@
         // --- Smooth Page Transition ---
         document.querySelectorAll('.ingot-link').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (this.getAttribute('href').includes('writing/')) {
+                const destination = this.getAttribute('href');
+                // Triggers the fade-out if it's a writing piece OR the calendar page
+                if (destination.includes('writing/') || destination === 'calendar.html') {
                     e.preventDefault();
-                    const destination = this.href;
+                    const targetUrl = this.href;
                     document.body.classList.add('fade-out');
                     setTimeout(() => {
-                        window.location.href = destination;
+                        window.location.href = targetUrl;
                     }, 400);
                 }
             });
