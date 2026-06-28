@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Timeline | Two Word Smiths</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Comfortaa', sans-serif; background-color: #0b0c10; color: #c5c6c7; padding: 40px 20px; line-height: 1.8; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(31, 40, 51, 0.6); padding: 40px; border-radius: 16px; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        nav a { color: #66fcf1; text-decoration: none; font-size: 0.9rem; letter-spacing: 1px; }
+        nav a:hover { text-decoration: underline; }
+        h1 { color: #ffffff; font-size: 2.5rem; margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid rgba(102, 252, 241, 0.2); padding-bottom: 10px; }
+        
+        /* Calendar Wrapper to ensure responsiveness */
+        .calendar-wrapper {
+            position: relative;
+            padding-bottom: 75%; /* Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(102, 252, 241, 0.1);
+            margin-top: 20px;
+        }
+        .calendar-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="index.html">← RETURN TO PORTAL</a>
+        </nav>
+
+        <main>
+            <h1>The Forge Timeline</h1>
+            
+            <div class="calendar-wrapper" style="background-color: #1f2833;">
+                <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&showPrint=0&title=Wordsmith's%20Timeline&mode=AGENDA&showCalendars=0&src=YjJhNmM5ZDA1MTk5NGMxMDI1NmZjNzc1YmFiMWY4OGE0N2NkZTNmMjE0NjUwN2U5MzBjNjBlNThkZWE0OTBjM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%237986cb" style="border: 0; filter: invert(90%) hue-rotate(180deg);" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
